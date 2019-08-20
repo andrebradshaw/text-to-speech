@@ -71,12 +71,12 @@ function currentMessageBody(){return formatDivContentAsString(gi(document,'messa
 
 function removeplaceholder(){
   var current = formatDivContentAsString(this.innerHTML);
-  if(current == 'Type your message...') {
+  if(current == 'Type or drop your message, then press Enter to play') {
     this.innerText = '';
     this.style.color = '#1c1c1c';
   }
   if(current == '') {
-    this.innerText = 'Type your message...';
+    this.innerText = 'Type or drop your message, then press Enter to play';
     this.style.color = '#7c7c7c';
   }
 }
@@ -110,7 +110,7 @@ function createSavedMsgSearchView() {
 
     var c_bod = ele('div'); /* content body */
     cont.appendChild(c_bod);
-    attr(c_bod,'style','width: 100%; display: grid; grid-auto-columns: 87% 13%; grid-gap: 12px; justify-content: center; background: #fff; color: #004471; border: 1.2px solid #1c1c1c; border-bottom-left-radius: .2em; border-bottom-right-radius: .2em; padding: 14px;'); //border-bottom-right-radius: 0.15em; border-bottom-left-radius: 0.15em; 
+    attr(c_bod,'style','width: 100%; display: grid; grid-auto-columns: 87% 13%; grid-gap: 12px; justify-content: center; background: #fff; color: #004471; border: 1.2px solid #1c1c1c; border-bottom-left-radius: .2em; border-bottom-right-radius: .2em; padding: 14px;'); 
     attr(c_bod,'id','saved_msg_content_container');
 
     var msgbod = ele('div'); /* message body */
@@ -122,7 +122,7 @@ function createSavedMsgSearchView() {
     attr(msg,'id','message_box_content');
     attr(msg,'contentEditable', 'true');
     attr(msg,'style', `max-height: ${Math.round(screen.height * 0.65)}px; max-width: ${Math.round(screen.width * 0.35)}px; background: #fff; color: #7c7c7c;`);
-    msg.innerText = 'Type your message...';
+    msg.innerText = 'Type or drop your message, then press Enter to play';
     msgbod.appendChild(msg);
     msg.onfocus = removeplaceholder;
     msg.onblur = removeplaceholder;
@@ -136,9 +136,9 @@ function playSelection(){
   var synth = window.speechSynthesis;
   var utterThis = new SpeechSynthesisUtterance(selText ? selText : '');
   var voices = synth.getVoices();
-  utterThis.voice = voices[0];
+  utterThis.voice = voices[3];
   utterThis.pitch = '1';
-  utterThis.rate = '1';
+  utterThis.rate = '1.3';
   synth.speak(utterThis);
 }
 
