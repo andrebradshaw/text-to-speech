@@ -87,24 +87,21 @@ function createSavedMsgSearchView() {
     var cont = ele('div');
     attr(cont, 'id', 'text_to_speech_cont');
     document.body.appendChild(cont);
-    attr(cont, 'style', `position: fixed; top: ${Math.round(screen.height * 0.15)}px; max-width: ${Math.round(screen.width * 0.55)}px; right: 2%; z-index: 111111; border-radius: 0.15em;`);
+    attr(cont, 'style', `position: fixed; top: ${Math.round(screen.height * 0.55)}px; max-width: ${Math.round(screen.width * 0.55)}px; right: 2%; z-index: 111111; border-radius: 0.15em;`);
 
     var head = ele('div');
     cont.appendChild(head);
     attr(head, 'style', 'display: grid; grid-auto-rows: 100%; grid-gap: 1%; justify-content: space-between; background: #283e4a; color: #fff; padding: 1px; border: 1.2px solid #1c1c1c; border-top-right-radius: 0.15em; border-top-left-radius: 0.15em; cursor: move;');
     head.onmouseover = dragElement;
-//     head.addEventListener('mouseover', dragElement);
 
     var htext = ele('div');
     head.appendChild(htext);
     attr(htext, 'style', 'grid-area: 1 / 1; padding: 4px');
     htext.innerText = 'Speak to me';
-//     min.addEventListener('click', minMize2Bottom);
 
     var cls = ele('div');
     head.appendChild(cls);
-    attr(cls, 'style', 'grid-area: 1 / 2; width: 24px; height: 24px; cursor: pointer; transform: translate(0px, 5px);'); //#659C35#88C057
-//     attr(cls, 'style', 'width: 24px; height: 24px');
+    attr(cls, 'style', 'grid-area: 1 / 2; width: 24px; height: 24px; cursor: pointer; transform: translate(0px, 5px);');
     cls.innerHTML = `<svg id="close_icon-invite" x="0px" y="0px" viewBox="0 0 100 100">
 <g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#d11124" stroke-width="8"><circle cx="50" cy="50" r="48"/><path d="M47.806834,19.6743435 L47.806834,77.2743435" id="close-layer-1" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" id="close-layer-2" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`;
     cls.onmouseenter = aninCloseBtn;
@@ -113,7 +110,7 @@ function createSavedMsgSearchView() {
 
     var c_bod = ele('div'); /* content body */
     cont.appendChild(c_bod);
-    attr(c_bod,'style','width: 100%; display: grid; grid-auto-columns: 70% 30%; grid-gap: 12px; justify-content: center; background: #fff; color: #004471; border: 1.2px solid #1c1c1c; border-bottom-left-radius: .2em; border-bottom-right-radius: .2em; padding: 14px;'); //border-bottom-right-radius: 0.15em; border-bottom-left-radius: 0.15em; 
+    attr(c_bod,'style','width: 100%; display: grid; grid-auto-columns: 87% 13%; grid-gap: 12px; justify-content: center; background: #fff; color: #004471; border: 1.2px solid #1c1c1c; border-bottom-left-radius: .2em; border-bottom-right-radius: .2em; padding: 14px;'); //border-bottom-right-radius: 0.15em; border-bottom-left-radius: 0.15em; 
     attr(c_bod,'id','saved_msg_content_container');
 
     var msgbod = ele('div'); /* message body */
@@ -124,23 +121,24 @@ function createSavedMsgSearchView() {
     var msg = ele('div'); /*message body - content editable div */
     attr(msg,'id','message_box_content');
     attr(msg,'contentEditable', 'true');
-    attr(msg,'style', `max-height: ${Math.round(screen.height * 0.15)}px; max-width: ${Math.round(screen.width * 0.55)}px; background: #fff; color: #7c7c7c;`);
+    attr(msg,'style', `max-height: ${Math.round(screen.height * 0.65)}px; max-width: ${Math.round(screen.width * 0.35)}px; background: #fff; color: #7c7c7c;`);
     msg.innerText = 'Type your message...';
     msgbod.appendChild(msg);
     msg.onfocus = removeplaceholder;
     msg.onblur = removeplaceholder;
     msg.onkeyup = (e)=>{
-      if(e.key == 'Enter') playSelection()
+      if(e.key == 'Enter') playSelection();
     };
 
 }
 function playSelection(){
   var selText = currentMessageBody();
   var synth = window.speechSynthesis;
-  var utterThis = new SpeechSynthesisUtterance(selText ? selText : 'Nothing selected. Select some text, homie.');
-  utterThis.voice = synth.getVoices()[3];
+  var utterThis = new SpeechSynthesisUtterance(selText ? selText : '');
+  var voices = synth.getVoices();
+  utterThis.voice = voices[0];
   utterThis.pitch = '1';
-  utterThis.rate = '1.2';
+  utterThis.rate = '1';
   synth.speak(utterThis);
 }
 
