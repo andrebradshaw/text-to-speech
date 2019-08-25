@@ -1,13 +1,8 @@
-var reg = (o, n) => o ? o[n] : '';
 var cn = (o, s) => o ? o.getElementsByClassName(s) : console.log(o);
 var tn = (o, s) => o ? o.getElementsByTagName(s) : console.log(o);
 var gi = (o, s) => o ? o.getElementById(s) : console.log(o);
-var rando = (n) => Math.round(Math.random() * n);
-var unqHsh = (a, o) => a.filter(i => o.hasOwnProperty(i) ? false : (o[i] = true));
-var delay = (ms) => new Promise(res => setTimeout(res, ms));
 var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
-
 
 function initSpeachRecognition(){
   var imtalkinhere = [];
@@ -16,15 +11,14 @@ function initSpeachRecognition(){
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
-  document.body.onclick = () => {
+  gi(document,'speech_text_content').onclick = () => {
     recognition.start();
     console.log('Listening...');
   }
   recognition.onresult = (e) => {
     if( imtalkinhere[imtalkinhere.length-1] != event.results[0][0].transcript ) imtalkinhere.push(event.results[0][0].transcript);
     var output = imtalkinhere.length > 0 ? imtalkinhere.reduce( (a,b) => a +' '+ b ) : event.results[0][0].transcript;
-    gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1];
-    console.log( imtalkinhere );
+    gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole');
   }
   recognition.onspeechend = () => recognition.stop();
 }
@@ -83,6 +77,10 @@ function anoutCloseBtn(){
   l2.style.transition = "all 333ms";
 }
 
+function closeView() {
+  this.parentElement.parentElement.outerHTML = '';
+}
+
 function createEle(obj, parent) {
   if(obj.attr && obj.attr.id) if(gi(document,obj.attr.id)) gi(document,obj.attr.id).outerHTML = '';
   var cont = ele(obj.tag);
@@ -103,7 +101,7 @@ var mainCont = {
     position: 'fixed',
 	padding: '11px',
     top: '10%',
-    width: '50%',
+    width: '33%',
     background: 'transparent',
     zIndex: '12211',
     transition: 'all 2s ease'
@@ -161,7 +159,8 @@ var contBody = {
 	borderBottomLeftRadius: '0.3em',
     color: color_p.darkPurple,
     padding: '10px'  
-  }
+  },
+  text: 'Click me to start listening. I will stop listening when you stop speaking.'
 }
 
 var main_ = createEle(mainCont, document.body);
@@ -171,6 +170,7 @@ var close_ = createEle(headClose, head_);
 var body_ =  createEle(contBody, main_);
 close_.onmouseenter = aninCloseBtn;
 close_.onmouseleave = anoutCloseBtn;
+close_.onclick = closeView;
 head_.onmouseover = dragElement;
 
 initSpeachRecognition()
