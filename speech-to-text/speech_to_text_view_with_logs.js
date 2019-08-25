@@ -421,6 +421,7 @@ function showSpeechLog() {
     styles: {
       width: '100%',
       background: color_p.whitePurple,
+      color: color_p.navyPurple,
       border: `1.4px solid ${color_p.navyPurple}`,
       borderBottomRightRadius: '0.3em',
       borderBottomLeftRadius: '0.3em',
