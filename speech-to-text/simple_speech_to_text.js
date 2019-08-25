@@ -6,20 +6,17 @@ var attr = (o, k, v) => o.setAttribute(k, v);
 
 function initSpeachRecognition(){
   var imtalkinhere = [];
-  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var SpeechRecognition = SpeechRecognition ? SpeechRecognition : webkitSpeechRecognition;
   var recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
-  gi(document,'speech_text_content').onclick = () => {
-    recognition.start();
-    console.log('Listening...');
-  }
+  gi(document,'speech_text_content').onclick = () => recognition.start();
   recognition.onresult = (e) => {
     if( imtalkinhere[imtalkinhere.length-1] != event.results[0][0].transcript ) imtalkinhere.push(event.results[0][0].transcript);
     var output = imtalkinhere.length > 0 ? imtalkinhere.reduce( (a,b) => a +' '+ b ) : event.results[0][0].transcript;
     gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole');
-  }
+  };
   recognition.onspeechend = () => recognition.stop();
 }
 
@@ -90,7 +87,7 @@ function createEle(obj, parent) {
   obj.text ? cont.innerText = obj.text : '';
   obj.innerHTML ? cont.innerHTML = obj.innerHTML : '';
   return cont;
-}
+};
 
 var mainCont = {
   tag: 'div',
@@ -106,7 +103,7 @@ var mainCont = {
     zIndex: '12211',
     transition: 'all 2s ease'
   }
-}
+};
 
 var mainHead = {
   tag: 'div',
@@ -120,7 +117,7 @@ var mainHead = {
 	borderTopLeftRadius: '0.3em',
     cursor: 'move'
   }
-}
+};
 
 var headText = {
   tag: 'div',
@@ -131,7 +128,7 @@ var headText = {
 	color: color_p.whitePurple
   },
   text: 'Speech to text' 
-}
+};
 
 
 var headClose = {
@@ -144,7 +141,7 @@ var headClose = {
   },
   innerHTML: `<svg x="0px" y="0px" viewBox="0 0 100 100">
 <g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" id="close-layer-1" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" id="close-layer-2" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`
-}
+};
 
 var contBody = {
   tag: 'div',
@@ -161,7 +158,7 @@ var contBody = {
     padding: '10px'  
   },
   text: 'Click me to start listening. I will stop listening when you stop speaking.'
-}
+};
 
 var main_ = createEle(mainCont, document.body);
 var head_ = createEle(mainHead, main_);
