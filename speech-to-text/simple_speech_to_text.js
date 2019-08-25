@@ -11,15 +11,20 @@ function initSpeachRecognition(){
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
-  gi(document,'speech_text_content').onclick = () => recognition.start();
+  recognition.start();
   recognition.onresult = (e) => {
     if( imtalkinhere[imtalkinhere.length-1] != event.results[0][0].transcript ) imtalkinhere.push(event.results[0][0].transcript);
     var output = imtalkinhere.length > 0 ? imtalkinhere.reduce( (a,b) => a +' '+ b ) : event.results[0][0].transcript;
-    gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole');
+    gi(document,'speech_text_content') ? gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole') : recognition.stop();
   };
-  recognition.onspeechend = () => recognition.stop();
+  recognition.onspeechend = () => {
+    if(gi(document,'speech_text_content')){
+      initSpeachRecognition();
+    }else{ 
+	  recognition.stop();
+    }
+  }
 }
-
 
 var color_p = {navyPurple: '#16021c', darkPurple: '#320640', whitePurple: '#f0e9f2'};
 
@@ -133,6 +138,9 @@ var headText = {
 
 var headClose = {
   tag: 'div',
+  attr: {
+    id: 'speech_closer',
+  },
   styles: {
   	gridArea: '1 / 2',
   	width: '28px', 
