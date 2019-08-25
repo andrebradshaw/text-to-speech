@@ -161,6 +161,11 @@ function hoverEditLog(){
   }
 }
 
+function updateSessionBlock() {
+  var divContentAsArray = this.innerHTML.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim().split(/\n/);
+  sessionBlock = divContentAsArray;
+}
+
 function downloadLogs() {
   var filename = reg(/.+\d+:\d+:\d+/.exec(new Date().toString()), 0).replace(/\s+/g, '_') + '_speechlogs.txt';
   var data = sessionBlock.length > 0 ? sessionBlock.reduce((a, b) => a + '\n' + b) : '';
@@ -440,11 +445,5 @@ function showSpeechLog() {
   lsave_.onmouseleave = saveHover;
   lsave_.onclick = downloadLogs;
 }
-
-function updateSessionBlock() {
-  var divContentAsArray = this.innerHTML.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim().split(/\n/);
-  sessionBlock = divContentAsArray;
-}
-
 
 initSpeachRecognition()
