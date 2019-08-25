@@ -99,10 +99,14 @@ function micMouseE() {
 
 function micSwitch() {
   if (this.getAttribute('status') == 'on') {
+    var rect = Array.from(tn(this,'rect'));
+    rect[rect.length-1].innerHTML = ``; 
     attr(gi(document, 'mic_head_stroke'), 'stroke', color_p.offRed);
     attr(gi(document, 'mic_stand_fill'), 'fill', color_p.offRed);
     attr(this, 'status', 'off');
   } else {
+    var rect = Array.from(tn(this,'rect'));
+    rect[rect.length-1].innerHTML = `<animate attributeName="fill" values="${color_p.onGreen}; #079147; ${color_p.onGreen};" begin="0s" dur="2s" repeatCount="indefinite" />`;
     attr(gi(document, 'mic_head_stroke'), 'stroke', color_p.onGreen);
     attr(gi(document, 'mic_stand_fill'), 'fill', color_p.onGreen);
     attr(this, 'status', 'on');
@@ -145,6 +149,18 @@ function saveHover() {
   }
 }
 
+function hoverEditLog(){
+  var pen = gi(document,'editLogPen');
+  var path = Array.from(tn(pen,'path'));
+  if(pen.getAttribute('status') == 'off'){
+    path[path.length-1].setAttribute('fill',color_p.whitePurple)
+    pen.setAttribute('status','on');
+  }else{
+    path[path.length-1].setAttribute('fill','transparent');
+    pen.setAttribute('status','off');
+  }
+}
+
 function downloadLogs() {
   var filename = reg(/.+\d+:\d+:\d+/.exec(new Date().toString()), 0).replace(/\s+/g, '_') + '_speechlogs.txt';
   var data = sessionBlock.length > 0 ? sessionBlock.reduce((a, b) => a + '\n' + b) : '';
@@ -181,6 +197,15 @@ function createEle(obj, parent) {
   return cont;
 }
 
+var svgs = {
+	pen: `<svg width="28px" height="28px" viewBox="0 0 32 32"><g fill-rule="evenodd"><g fill="${color_p.whitePurple}"><path d="M22,4 L19,4 L19,3 L18,3 L18,4 L15,4 L15,3 L14,3 L14,4 L14,4 L11,4 L11,3 L10,3 L10,4 L8.99742191,4 C7.89427625,4 7,4.88976324 7,6.00359486 L7,26.9964051 C7,28.10296 7.89092539,29 8.99742191,29 L24.0025781,29 C25.1057238,29 26,28.1102368 26,26.9964051 L26,6.00359486 C26,4.89703997 25.1090746,4 24.0025781,4 L23,4 L23,3 L22,3 L22,4 L22,4 Z M22,5 L19,5 L19,6 L18,6 L18,5 L15,5 L15,6 L14,6 L14,5 L11,5 L11,6 L10,6 L10,5 L8.9999602,5 C8.44769743,5 8,5.43891776 8,6.00307055 L8,26.9969294 C8,27.55091 8.45470893,28 8.9999602,28 L24.0000398,28 C24.5523026,28 25,27.5610822 25,26.9969294 L25,6.00307055 C25,5.44908998 24.5452911,5 24.0000398,5 L23,5 L23,6 L22,6 L22,5 L22,5 Z M10,9 L10,10 L23,10 L23,9 L10,9 L10,9 Z M10,12 L10,13 L23,13 L23,12 L10,12 L10,12 Z M10,15 L10,16 L23,16 L23,15 L10,15 L10,15 Z M10,18 L10,19 L23,19 L23,18 L10,18 L10,18 Z M10,21 L10,22 L23,22 L23,21 L10,21 L10,21 Z M10,24 L10,25 L23,25 L23,24 L10,24 L10,24 Z" /></g></g><g status="off" id="editLogPen" transform="translate(10, 5) rotate(-5)" stroke="none" stroke-width="1" fill="none"><g transform="translate(-273, -2727)"><g transform="translate(100, 2626)"><g transform="translate(170, 98)" ><g><polygon points="0 0 24 0 24 24 0 24"/><path d="M14.06,9.02 L14.98,9.94 L5.92,19 L5,19 L5,18.08 L14.06,9.02 Z M17.66,3 C17.41,3 17.15,3.1 16.96,3.29 L15.13,5.12 L18.88,8.87 L20.71,7.04 C21.1,6.65 21.1,6.02 20.71,5.63 L18.37,3.29 C18.17,3.09 17.92,3 17.66,3 Z M14.06,6.19 L3,17.25 L3,21 L6.75,21 L17.81,9.94 L14.06,6.19 Z" fill="transparent"/></g></g></g></g></g></svg>`,
+	mic: `
+<svg width="22px" height="22px" viewBox="0 0 103 104"><g stroke="none" stroke-width="3" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g id="mic_head_stroke" stroke-width="3.5" stroke="${color_p.onGreen}" transform="translate(-1098, -702)"><g transform="translate(1100, 704)"><rect id="mic_stand_fill" fill="${color_p.onGreen}" x="29" y="0" width="40" height="70" rx="20"><animate attributeName="fill" values="${color_p.onGreen}; #079147; ${color_p.onGreen};" begin="0s" dur="2s" repeatCount="indefinite" /></rect><path d="M79,49.9854735 C79,66.5580274 65.5721855,79.9927367 49,79.9927367 L49,79.9927367 C32.4314575,79.9927367 19,66.5601111 19,49.9854735" /><path d="M49,80 L49,100" /><path d="M29,100 L69,100" /><path d="M19,50 L22,50" /><path d="M76,50 L79,50" /></g></g></g></svg>`,
+	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="${color_p.offRed}" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
+	save: `<svg x="0px" y="0px" stroke-width="3.5" stroke="${color_p.onGreen}" viewBox="0 0 101.026 101.026"><g><path d="M83.388,63.888c-0.829,0-1.5,0.671-1.5,1.5v18.5h-63v-18.5c0-0.829-0.671-1.5-1.5-1.5s-1.5,0.671-1.5,1.5v20   c0,0.829,0.671,1.5,1.5,1.5h66c0.829,0,1.5-0.671,1.5-1.5v-20C84.888,64.56,84.217,63.888,83.388,63.888z"/><path d="M49.328,69.449c0.293,0.293,0.677,0.439,1.061,0.439s0.768-0.146,1.061-0.439l13-13c0.586-0.585,0.586-1.536,0-2.121   c-0.586-0.586-1.535-0.586-2.121,0L51.89,64.767V8.388c0-0.829-0.671-1.5-1.5-1.5s-1.5,0.671-1.5,1.5v56.379L38.451,54.328   c-0.586-0.586-1.535-0.586-2.121,0c-0.586,0.585-0.586,1.536,0,2.121L49.328,69.449z"/></g></svg>`
+};
+
+
 var mainCont = {
   tag: 'div',
   attr: {
@@ -190,7 +215,7 @@ var mainCont = {
     position: 'fixed',
     padding: '11px',
     top: '10%',
-    left: '12%',
+    left: '8%',
     width: `${Math.round(screen.width * 0.33)}px`,
     background: 'transparent',
     zIndex: '12211',
@@ -203,7 +228,7 @@ var mainHead = {
   styles: {
     padding: '1px',
     display: 'grid',
-    gridTemplateColumns: '79% 8% 8% 5%',
+    gridTemplateColumns: '85% 5% 5% 5%',
     background: color_p.darkPurple,
     border: `1.4px solid ${color_p.navyPurple}`,
     borderTopRightRadius: '0.3em',
@@ -234,7 +259,7 @@ var stopSpeech = {
     cursor: 'pointer',
     transform: 'translate(0px, 5px)'
   },
-  innerHTML: `<svg width="22px" height="22px" viewBox="0 0 103 104" version="1.1"><g stroke="none" stroke-width="3" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g id="mic_head_stroke" stroke-width="3.5" stroke="${color_p.onGreen}" transform="translate(-1098, -702)"><g transform="translate(1100, 704)"><rect id="mic_stand_fill" fill="${color_p.onGreen}" x="29" y="0" width="40" height="70" rx="20"/><path d="M79,49.9854735 C79,66.5580274 65.5721855,79.9927367 49,79.9927367 L49,79.9927367 C32.4314575,79.9927367 19,66.5601111 19,49.9854735"/><path d="M49,80 L49,100" /><path d="M29,100 L69,100"/><path d="M19,50 L22,50"/><path d="M76,50 L79,50"/></g></g></g></svg>`
+  innerHTML: svgs.mic
 };
 
 var speechClip = {
@@ -244,7 +269,7 @@ var speechClip = {
     cursor: 'pointer',
     transform: 'translate(0px, 2px)'
   },
-  innerHTML: `<svg width="28px" height="28px" viewBox="0 0 32 32" version="1.1"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g id="icon-52-notebook-text" sketch:type="MSArtboardGroup" fill="${color_p.whitePurple}"><path d="M22,4 L19,4 L19,3 L18,3 L18,4 L15,4 L15,3 L14,3 L14,4 L14,4 L11,4 L11,3 L10,3 L10,4 L8.99742191,4 C7.89427625,4 7,4.88976324 7,6.00359486 L7,26.9964051 C7,28.10296 7.89092539,29 8.99742191,29 L24.0025781,29 C25.1057238,29 26,28.1102368 26,26.9964051 L26,6.00359486 C26,4.89703997 25.1090746,4 24.0025781,4 L23,4 L23,3 L22,3 L22,4 L22,4 Z M22,5 L19,5 L19,6 L18,6 L18,5 L15,5 L15,6 L14,6 L14,5 L11,5 L11,6 L10,6 L10,5 L8.9999602,5 C8.44769743,5 8,5.43891776 8,6.00307055 L8,26.9969294 C8,27.55091 8.45470893,28 8.9999602,28 L24.0000398,28 C24.5523026,28 25,27.5610822 25,26.9969294 L25,6.00307055 C25,5.44908998 24.5452911,5 24.0000398,5 L23,5 L23,6 L22,6 L22,5 L22,5 Z M10,9 L10,10 L23,10 L23,9 L10,9 L10,9 Z M10,12 L10,13 L23,13 L23,12 L10,12 L10,12 Z M10,15 L10,16 L23,16 L23,15 L10,15 L10,15 Z M10,18 L10,19 L23,19 L23,18 L10,18 L10,18 Z M10,21 L10,22 L23,22 L23,21 L10,21 L10,21 Z M10,24 L10,25 L23,25 L23,24 L10,24 L10,24 Z" id="notebook-text" sketch:type="MSShapeGroup"/></g></g></svg>`
+  innerHTML: svgs.pen
 };
 
 var headClose = {
@@ -258,8 +283,7 @@ var headClose = {
     height: '32px',
     cursor: 'pointer',
   },
-  innerHTML: `<svg x="0px" y="0px" viewBox="0 0 100 100">
-<g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`
+  innerHTML: svgs.close
 };
 
 var contBody = {
@@ -308,7 +332,8 @@ stop_.onclick = micSwitch;
 stop_.onmouseenter = micMouseE;
 stop_.onmouseleave = micMouseE;
 logs_.onclick = showSpeechLog;
-
+logs_.onmouseenter = hoverEditLog;
+logs_.onmouseleave = hoverEditLog;
 
 function showSpeechLog() {
   if (gi(document, 'log_speech_text_container')) gi(document, 'log_speech_text_container').outerHTML = '';
@@ -334,7 +359,7 @@ function showSpeechLog() {
     styles: {
       padding: '1px',
       display: 'grid',
-      gridTemplateColumns: '87% 8% 5%',
+      gridTemplateColumns: '90% 5% 5%',
       background: color_p.darkPurple,
       border: `1.4px solid ${color_p.navyPurple}`,
       borderTopRightRadius: '0.3em',
@@ -365,7 +390,7 @@ function showSpeechLog() {
       height: '28px',
       cursor: 'pointer',
     },
-    innerHTML: `<svg x="0px" y="0px" stroke-width="3.5" stroke="${color_p.onGreen}" viewBox="0 0 101.026 101.026"><g><path d="M83.388,63.888c-0.829,0-1.5,0.671-1.5,1.5v18.5h-63v-18.5c0-0.829-0.671-1.5-1.5-1.5s-1.5,0.671-1.5,1.5v20   c0,0.829,0.671,1.5,1.5,1.5h66c0.829,0,1.5-0.671,1.5-1.5v-20C84.888,64.56,84.217,63.888,83.388,63.888z"/><path d="M49.328,69.449c0.293,0.293,0.677,0.439,1.061,0.439s0.768-0.146,1.061-0.439l13-13c0.586-0.585,0.586-1.536,0-2.121   c-0.586-0.586-1.535-0.586-2.121,0L51.89,64.767V8.388c0-0.829-0.671-1.5-1.5-1.5s-1.5,0.671-1.5,1.5v56.379L38.451,54.328   c-0.586-0.586-1.535-0.586-2.121,0c-0.586,0.585-0.586,1.536,0,2.121L49.328,69.449z"/></g></svg>`
+    innerHTML: svgs.save
   };
 
   var logClose = {
@@ -379,8 +404,7 @@ function showSpeechLog() {
       height: '32px',
       cursor: 'pointer',
     },
-    innerHTML: `<svg x="0px" y="0px" viewBox="0 0 100 100">
-    <g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`
+    innerHTML: svgs.close
   };
 
   var logBody = {
