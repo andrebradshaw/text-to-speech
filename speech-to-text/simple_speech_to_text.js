@@ -165,7 +165,7 @@ var contBody = {
     color: color_p.darkPurple,
     padding: '10px'  
   },
-  text: 'Click me to start listening. I will stop listening when you stop speaking.'
+  text: 'Talk to me'
 };
 
 var main_ = createEle(mainCont, document.body);
