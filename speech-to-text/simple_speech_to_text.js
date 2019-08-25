@@ -4,6 +4,8 @@ var gi = (o, s) => o ? o.getElementById(s) : console.log(o);
 var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
 
+var sessionBlock = [];
+
 function initSpeachRecognition(){
   var imtalkinhere = [];
   var SpeechRecognition = SpeechRecognition ? SpeechRecognition : webkitSpeechRecognition;
@@ -15,12 +17,16 @@ function initSpeachRecognition(){
   recognition.onresult = (e) => {
     if( imtalkinhere[imtalkinhere.length-1] != event.results[0][0].transcript ) imtalkinhere.push(event.results[0][0].transcript);
     var output = imtalkinhere.length > 0 ? imtalkinhere.reduce( (a,b) => a +' '+ b ) : event.results[0][0].transcript;
-    gi(document,'speech_text_content') ? gi(document,'speech_text_content').innerText = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole') : recognition.stop();
+    var lastSpeech = imtalkinhere[imtalkinhere.length-1].replace(/s\*\*\*/g,'shit').replace(/f\*\*\*/g,'fuck').replace(/a\*\*\*\*\*\*/g,'asshole');
+    gi(document,'speech_text_content') ? gi(document,'speech_text_content').innerText = lastSpeech : recognition.stop();
   };
-  recognition.onspeechend = () => {
-    if(gi(document,'speech_text_content')){
+
+  recognition.onaudioend = ()=> {
+    if(imtalkinhere.length > 0) sessionBlock.push(imtalkinhere[imtalkinhere.length-1]);
+    if(gi(document,'speech_text_container')){
       initSpeachRecognition();
     }else{ 
+      console.log(sessionBlock)
 	  recognition.stop();
     }
   }
@@ -154,7 +160,7 @@ var headClose = {
 var contBody = {
   tag: 'div',
   attr: {
-	id: 'speech_text_content'
+	id: 'speech_text_container'
   },
   styles: {
     width: '100%',
@@ -162,17 +168,32 @@ var contBody = {
     border: `1.4px solid ${color_p.navyPurple}`,
 	borderBottomRightRadius: '0.3em',
 	borderBottomLeftRadius: '0.3em',
+    padding: '10px'  
+  }
+};
+
+var textField = {
+  tag: 'div',
+  attr: {
+	id: 'speech_text_content',
+    contentEditable: 'true'
+  },
+  styles: {
+    width: '100%',
+    background: 'transparent',
     color: color_p.darkPurple,
     padding: '10px'  
   },
   text: 'Talk to me'
 };
 
+
 var main_ = createEle(mainCont, document.body);
 var head_ = createEle(mainHead, main_);
 var hdesc_ = createEle(headText, head_);
 var close_ = createEle(headClose, head_);
 var body_ =  createEle(contBody, main_);
+var text_ =  createEle(textField, body_);
 close_.onmouseenter = aninCloseBtn;
 close_.onmouseleave = anoutCloseBtn;
 close_.onclick = closeView;
