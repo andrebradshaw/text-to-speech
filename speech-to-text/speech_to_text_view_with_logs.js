@@ -153,7 +153,7 @@ function hoverEditLog(){
   var pen = gi(document,'editLogPen');
   var path = Array.from(tn(pen,'path'));
   if(pen.getAttribute('status') == 'off'){
-    path[path.length-1].setAttribute('fill',color_p.whitePurple)
+    path[path.length-1].setAttribute('fill',color_p.whitePurple);
     pen.setAttribute('status','on');
   }else{
     path[path.length-1].setAttribute('fill','transparent');
