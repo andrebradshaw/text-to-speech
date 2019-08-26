@@ -21,20 +21,27 @@ function initSpeachRecognition() {
     if (gi(document, 'speech_recog_status') && gi(document, 'speech_recog_status').getAttribute('status') == 'off') recognition.stop(); 
 
     var hearingThis = e.results[0][0].transcript.replace(/s\*\*\*/g, 'shit').replace(/f\*\*\*/g, 'fuck').replace(/a\*\*\*\*\*\*/g, 'asshole');
-    imtalkinhere.push(hearingThis);
-    var lastSpeech = imtalkinhere[imtalkinhere.length - 1];
 
+    imtalkinhere.push(hearingThis);
+
+    var longest = Math.max(...imtalkinhere.map(el=> el.length));
+    var longArr = imtalkinhere.filter(el=> el.length == longest);
+    var lastSpeech = longArr[longArr.length-1];
     gi(document, 'speech_text_content') ? gi(document, 'speech_text_content').innerText = lastSpeech : recognition.stop();
 
   };
 
   recognition.onaudioend = () => {
-    if (imtalkinhere.length > 0) sessionBlock.push(imtalkinhere[imtalkinhere.length - 1]);
+    var longest = Math.max(...imtalkinhere.map(el=> el.length));
+    var longArr = imtalkinhere.filter(el=> el.length == longest);
+    var lastSpeech = longArr[longArr.length-1];
+    if (imtalkinhere.length > 0) sessionBlock.push(lastSpeech);
     if (gi(document, 'speech_text_container') && gi(document, 'speech_recog_status').getAttribute('status') == 'on') initSpeachRecognition();
     else recognition.stop();
   }
 
 }
+
 
 var color_p = {
   navyPurple: '#16021c',
