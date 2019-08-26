@@ -20,11 +20,9 @@ function initSpeachRecognition() {
     /* this causes the speech to stop recording, but it will still show up in the DOM until the present speech stops. move it down of you want to catch up until the current speech stops */
     if (gi(document, 'speech_recog_status') && gi(document, 'speech_recog_status').getAttribute('status') == 'off') recognition.stop(); 
 
-    if (imtalkinhere[imtalkinhere.length - 1] != e.results[0][0].transcript) imtalkinhere.push(e.results[0][0].transcript);
-
-    var output = imtalkinhere.length > 0 ? imtalkinhere.reduce((a, b) => a + ' ' + b) : event.results[0][0].transcript;
-
-    var lastSpeech = imtalkinhere[imtalkinhere.length - 1].replace(/s\*\*\*/g, 'shit').replace(/f\*\*\*/g, 'fuck').replace(/a\*\*\*\*\*\*/g, 'asshole');
+    var hearingThis = e.results[0][0].transcript.replace(/s\*\*\*/g, 'shit').replace(/f\*\*\*/g, 'fuck').replace(/a\*\*\*\*\*\*/g, 'asshole');
+    imtalkinhere.push(hearingThis);
+    var lastSpeech = imtalkinhere[imtalkinhere.length - 1];
 
     gi(document, 'speech_text_content') ? gi(document, 'speech_text_content').innerText = lastSpeech : recognition.stop();
 
