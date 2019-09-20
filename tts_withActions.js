@@ -21,7 +21,6 @@ function playSelection(){
   var textArr = selText.split(/\b(?=\W+)/);
   var cont = createHTMLPopView(synth,textArr);
 
-
   var boundaries = [];
   utterThis.onboundary = (e) => {
     boundaries.push(e.name);
@@ -30,10 +29,11 @@ function playSelection(){
   }
   utterThis.onend = (e) => {
     if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
+    synth.cancel();
   }
 
 }
-playSelection()
+playSelection();
 
 function showLastWord(word){
   var spans = Array.from(cn(document,'wordStreamArr'));
@@ -49,14 +49,29 @@ function createHTMLPopView(synth, wordStreamArr){
   attr(cont, 'id', 'tts_viewer_pop');
   attr(cont, 'style', `position: fixed; top: 20%; left: 10%; max-width 50%`);
   document.body.appendChild(cont);
-  cont.onclick = () => {
+
+  var head = ele('div');
+  attr(head,'style',`display: grid; grid-template-columns: 94% 5%; grid-gap: 1%; background: #041e29;`);
+  cont.appendChild(head);
+  head.onclick = () => {
 	if(synth.paused) synth.resume()
 	else synth.pause()
   }
+
+  var htxt = ele('div');
+  attr(htxt,'style',`color: #fff; padding: 4px;`);
+  htxt.innerText = 'TTS';
+  head.appendChild(htxt);
+
+  var cbod = ele('div');
+//   attr(cbod,'style',``);
+  cont.appendChild(cbod);
+
   var text = ele('div');
   attr(text, 'id', 'tts_viewer_text');
   attr(text, 'style', `background: #064d6b; color: #fff; border-radius: 0.4em; padding: 20px; text-align: left;`);
-  cont.appendChild(text);
+  cbod.appendChild(text);
   text.innerHTML = htmlWords;
-
+  
+  
 }
