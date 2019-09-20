@@ -47,7 +47,7 @@ function createHTMLPopView(synth, wordStreamArr){
   var htmlWords = '<span class="wordStreamArr">'+wordStreamArr.reduce((a,b)=> a+`</span><span class="wordStreamArr">`+b) + '</span>';
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
-  attr(cont, 'style', `position: fixed; top: 20%; left: 10%;`);
+  attr(cont, 'style', `position: fixed; top: 20%; left: 10%; max-width 50%`);
   document.body.appendChild(cont);
   cont.onclick = () => {
 	if(synth.paused) synth.resume()
