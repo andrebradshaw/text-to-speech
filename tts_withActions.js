@@ -108,12 +108,11 @@ async function playSelection(){
 
   function showLastWord(pos){
     var spans = Array.from(cn(document,'wordStrmArr'));
-    var targs = spans.slice(0,(pos+1)); 
-    /*will need to fix this later. It stops before the end, but close enough for now*/
+    var poz = pos > (spans.length) ? spans.length-1 : pos;
+    var targs = spans.slice(0,(poz)); 
     if(targs && targs.length > 0) {
       targs.forEach(el=> {
         el.style.background = '#08709c';
-        el.style.transition = 'all 196ms';
       })
     }
   }
