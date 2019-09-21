@@ -94,34 +94,37 @@ async function playSelection(){
     }
   }
 
+  if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
+
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
-  attr(cont, 'style', `position: fixed; top: 10%; left: 5%; min-width: 60%; max-width: 80%; z-index: 13120;`);
+  attr(cont, 'style', `position: fixed; top: 10%; left: 60px; width: 680px; z-index: 13120; font-size: 16px; font-family: "Georgia", Sarif;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head,'style',`display: grid; grid-template-columns: 70% 9% 8% 8%; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
+  attr(head,'style',`display: grid; grid-template-columns: ${(5*16)}px ${(4*16)}px 430px 33px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
-  var htxt = ele('div');
-  attr(htxt,'style',`grid-area: 1 / 1; color: #fff; padding: 4px; font-family: "Lucida Console", Monospace;`);
-  htxt.innerText = 'TTS';
-  head.appendChild(htxt);
+  var slab = ele('div');
+  attr(slab,'style','grid-area: 1 / 1; width: 28px; color: #fff; padding: 6px;');
+  slab.innerText = 'speed';
+  head.appendChild(slab);
 
-  var speed = ele('input');
-  attr(speed,'style','grid-area: 1 / 2; width: 28px;');
-  speed.value = '1.7';
+  var speed = ele('div');
+  attr(speed, 'contentEditable', 'true');
+  attr(speed,'style','grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text;');
+  speed.innerText = '1.7';
   head.appendChild(speed);
 
   var play = ele('div');
   attr(play,'playing','off');
-  attr(play,'style',`grid-area: 1 / 3; width: 28px; height: 28px; cursor: pointer;`);
+  attr(play,'style',`grid-area: 1 / 4; width: 28px; height: 28px; cursor: pointer;`);
   play.innerHTML = svgs.play;
   head.appendChild(play);
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 4; width: 31px; height: 31px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 5; width: 31px; height: 31px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -134,7 +137,7 @@ async function playSelection(){
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; font-family: "Georgia", Sarif; font-size: 1.6em;`);
+  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
@@ -143,20 +146,19 @@ async function playSelection(){
     cont.outerHTML = '';
   };
 
-  var pi = .2;
+  var pi = 1;
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
-	if( ca == 'off' ){ 
-      text.innerHTML = '<span class="wordStrmArr">'+text.innerHTML.split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>'
+	if( ca == 'off' ){
+      text.innerHTML = '<span class="wordStrmArr">'+text.innerHTML.split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
 
 	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.');
 
       utterThis.pitch = pi;
 
-      var rate = parseFloat(reg(/[\d\.]+/.exec(speed.value),0)).toString();
+      var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)),0).toString() : 1.7;
 
       utterThis.rate = rate;
-//       utterThis.voice = voices[3];
 
       utterThis.onend = (e) => {
         if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
@@ -178,7 +180,7 @@ async function playSelection(){
       attr(play,'playing','play');
       play.innerHTML = svgs.play;
 	  synth.pause();
-    } 
+    }
 
 	if( ca == 'play' && ca != 'off' ){
       attr(play,'playing','pause');
