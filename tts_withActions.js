@@ -150,7 +150,7 @@ async function playSelection(){
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
 	if( ca == 'off' ){
-      text.innerHTML = '<span class="wordStrmArr">'+text.innerHTML.split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
+      text.innerHTML = '<span class="wordStrmArr">'+formatDivContentAsString(text.innerHTML).split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
 
 	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.');
 
@@ -192,4 +192,3 @@ async function playSelection(){
 }
 
 playSelection();
-
