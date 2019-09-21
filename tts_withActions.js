@@ -223,7 +223,7 @@ async function playSelection() {
   text.innerHTML = selText;
 
   cls.onclick = () => {
-    gi(document, 'selection_window').outerHTML = '';
+    if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
     synth.cancel();
     cont.outerHTML = '';
   };
