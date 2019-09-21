@@ -10,7 +10,6 @@ var attr = (o, k, v) => o.setAttribute(k, v);
 
 var formatDivContentAsString = (s) => s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim();
 
-
 var svgs= {
 	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
 	play:`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 100.25 100.25" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve">
@@ -82,30 +81,12 @@ function getSelectionText() {
 }
 
 async function playSelection(){
-  var selText = getSelectionText() ? getSelectionText() : 'Nothing selected.';
-  var textArr = selText.split("");
-
-  var boundaries = [];
-  var utterThis = new SpeechSynthesisUtterance(selText ? selText : 'Nothing selected.');
-  utterThis.pitch = '1';
-  utterThis.rate = '1.8';
-  utterThis.onend = (e) => {
-    if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
-    window.speechSynthesis.cancel();
-  }
-
-  utterThis.onboundary = (e) => {
-    boundaries.push(e.name);
-    var currentWord = textArr[boundaries.length-1];
-    showLastWord(e.charIndex);
-  }
-
+  var selText = getSelectionText() ? getSelectionText() : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.';
   var synth = window.speechSynthesis;
 
   function showLastWord(pos){
     var spans = Array.from(cn(document,'wordStrmArr'));
-    var poz = pos > (spans.length) ? spans.length-1 : pos;
-    var targs = spans.slice(0,(poz)); 
+    var targs = spans.slice(0,(pos+5));
     if(targs && targs.length > 0) {
       targs.forEach(el=> {
         el.style.background = '#08709c';
@@ -113,63 +94,92 @@ async function playSelection(){
     }
   }
 
-  var htmlWords = '<span class="wordStrmArr">'+textArr.reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
   attr(cont, 'style', `position: fixed; top: 10%; left: 5%; min-width: 60%; max-width: 80%; z-index: 13120;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head,'style',`display: grid; grid-template-columns: 80% 8% 8%; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
+  attr(head,'style',`display: grid; grid-template-columns: 70% 9% 8% 8%; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
   var htxt = ele('div');
-  attr(htxt,'style',`grid-area: 1 / 1; color: #fff; padding: 4px;`);
+  attr(htxt,'style',`grid-area: 1 / 1; color: #fff; padding: 4px; font-family: "Lucida Console", Monospace;`);
   htxt.innerText = 'TTS';
   head.appendChild(htxt);
 
+  var speed = ele('input');
+  attr(speed,'style','grid-area: 1 / 2; width: 28px;');
+  speed.value = '1.7';
+  head.appendChild(speed);
+
   var play = ele('div');
   attr(play,'playing','off');
-  attr(play,'style',`grid-area: 1 / 2; width: 28px; height: 28px; cursor: pointer;`);
+  attr(play,'style',`grid-area: 1 / 3; width: 28px; height: 28px; cursor: pointer;`);
   play.innerHTML = svgs.play;
   head.appendChild(play);
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 3; width: 31px; height: 31px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 4; width: 31px; height: 31px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
   cls.onmouseleave = anoutCloseBtn;
-  cls.onclick = closeView;
 
   var cbod = ele('div');
   attr(cbod,'style',`border-bottom-left-radius: 0.4em; border-bottom-left-radius: 0.4em;`);
   cont.appendChild(cbod);
 
   var text = ele('div');
+  attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left;`);
+  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; font-family: "Georgia", Sarif; font-size: 1.6em;`);
   cbod.appendChild(text);
-  text.innerHTML = htmlWords;
+  text.innerHTML = selText;
 
   cls.onclick = () => {
 	synth.cancel();
     cont.outerHTML = '';
   };
 
+  var pi = .2;
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
-	if( ca == 'off' && ca != 'pause' ){
+	if( ca == 'off' ){ 
+      text.innerHTML = '<span class="wordStrmArr">'+text.innerHTML.split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>'
+
+	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.');
+
+      utterThis.pitch = pi;
+
+      var rate = parseFloat(reg(/[\d\.]+/.exec(speed.value),0)).toString();
+
+      utterThis.rate = rate;
+//       utterThis.voice = voices[3];
+
+      utterThis.onend = (e) => {
+        if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
+        window.speechSynthesis.cancel();
+      };
+
+      utterThis.onboundary = (e) => {
+        showLastWord(e.charIndex);
+      };
+
+      attr(text, 'contentEditable', 'false');
       attr(play,'playing','pause');
       play.innerHTML = svgs.pause;
 	  synth.speak(utterThis);
+
     }
+
 	if( ca == 'pause' && ca != 'off' ){
       attr(play,'playing','play');
       play.innerHTML = svgs.play;
 	  synth.pause();
     } 
+
 	if( ca == 'play' && ca != 'off' ){
       attr(play,'playing','pause');
       play.innerHTML = svgs.pause;
