@@ -10,7 +10,9 @@ var attr = (o, k, v) => o.setAttribute(k, v);
 
 var formatDivContentAsString = (s) => s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim();
 
+
 var svgs= {
+	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
 	play:`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 100.25 100.25" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve">
 <g>	<path fill="#14b370" d="M69.817,48.243l-30-19.5c-0.461-0.3-1.05-0.322-1.533-0.061c-0.483,0.263-0.785,0.769-0.785,1.318v39   c0,0.55,0.301,1.056,0.785,1.318c0.224,0.121,0.47,0.182,0.715,0.182c0.285,0,0.57-0.081,0.817-0.242l30-19.5   c0.426-0.276,0.683-0.75,0.683-1.258S70.243,48.519,69.817,48.243z M40.5,66.237V32.764L66.248,49.5L40.5,66.237z"/>
 	<path fill="#14b370"  d="M49.5,6.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,6.5,49.5,6.5z M49.5,89.5   c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,89.5,49.5,89.5z"/>
@@ -19,6 +21,62 @@ var svgs= {
   };
 
 
+function aninCloseBtn() {
+  var l1 = tn(this, 'path')[0];
+  var l2 = tn(this, 'path')[1];
+  l1.style.transform = "translate(49px, 50px) rotate(45deg) translate(-49px, -50px)";
+  l1.style.transition = "all 233ms";
+  l2.style.transform = "translate(49px, 50px) rotate(135deg) translate(-49px, -50px)";
+  l2.style.transition = "all 233ms";
+}
+
+function anoutCloseBtn() {
+  var l1 = tn(this, 'path')[0];
+  var l2 = tn(this, 'path')[1];
+  l1.style.transform = "translate(49px, 50px) rotate(225deg) translate(-49px, -50px)";
+  l1.style.transition = "all 233ms";
+  l2.style.transform = "translate(49px, 50px) rotate(225deg) translate(-49px, -50px)";
+  l2.style.transition = "all 233ms";
+}
+
+function closeView() {
+  this.parentElement.parentElement.outerHTML = '';
+}
+
+
+function dragElement() {
+  var el = this.parentElement;
+  var pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
+  if (document.getElementById(this.id)) document.getElementById(this.id).onmousedown = dragMouseDown;
+  else this.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    el.style.top = (el.offsetTop - pos2) + "px";
+    el.style.left = (el.offsetLeft - pos1) + "px";
+    el.style.opacity = "0.85";
+    el.style.transition = "opacity 700ms";
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+    el.style.opacity = "1";
+  }
+}
 
 function getSelectionText() {
   var text = "";
@@ -28,8 +86,7 @@ function getSelectionText() {
 }
 
 async function playSelection(){
-  var selText = getSelectionText();
-  //'A CAPTCHA is a type of challenge–response test used in computing to determine whether or not the user is human.'
+  var selText = getSelectionText() ? getSelectionText() : 'Nothing selected.';
   var textArr = selText.split("");
 
   var boundaries = [];
@@ -37,8 +94,7 @@ async function playSelection(){
   utterThis.pitch = '1';
   utterThis.rate = '1.8';
   utterThis.onend = (e) => {
-
-  if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
+    if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
     window.speechSynthesis.cancel();
   }
 
@@ -47,6 +103,7 @@ async function playSelection(){
     var currentWord = textArr[boundaries.length-1];
     showLastWord(e.charIndex);
   }
+
   var synth = window.speechSynthesis;
 
   function showLastWord(pos){
@@ -64,23 +121,32 @@ async function playSelection(){
   var htmlWords = '<span class="wordStrmArr">'+textArr.reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
-  attr(cont, 'style', `position: fixed; top: 10%; left: 5%; max-width 50%; z-index: 13120;`);
+  attr(cont, 'style', `position: fixed; top: 10%; left: 5%; min-width: 60%; max-width: 80%; z-index: 13120;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head,'style',`display: grid; grid-template-columns: 94% 5%; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;`);
+  attr(head,'style',`display: grid; grid-template-columns: 80% 8% 8%; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
   cont.appendChild(head);
-
-  var play = ele('div');
-  attr(play,'playing','off');
-  attr(play,'style',`grid-area: 1 / 2; width: 31px; height: 31px;`);
-  play.innerHTML = svgs.play;
-  head.appendChild(play);
+  head.onmouseover = dragElement;
 
   var htxt = ele('div');
   attr(htxt,'style',`grid-area: 1 / 1; color: #fff; padding: 4px;`);
   htxt.innerText = 'TTS';
   head.appendChild(htxt);
+
+  var play = ele('div');
+  attr(play,'playing','off');
+  attr(play,'style',`grid-area: 1 / 2; width: 28px; height: 28px; cursor: pointer;`);
+  play.innerHTML = svgs.play;
+  head.appendChild(play);
+
+  var cls = ele('div');
+  attr(cls, 'style', `grid-area: 1 / 3; width: 31px; height: 31px; cursor: pointer;`);
+  head.appendChild(cls);
+  cls.innerHTML = svgs.close;
+  cls.onmouseenter = aninCloseBtn;
+  cls.onmouseleave = anoutCloseBtn;
+  cls.onclick = closeView;
 
   var cbod = ele('div');
   attr(cbod,'style',`border-bottom-left-radius: 0.4em; border-bottom-left-radius: 0.4em;`);
@@ -91,7 +157,6 @@ async function playSelection(){
   attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left;`);
   cbod.appendChild(text);
   text.innerHTML = htmlWords;
-
 
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
