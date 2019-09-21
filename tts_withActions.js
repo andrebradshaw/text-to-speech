@@ -39,10 +39,6 @@ function anoutCloseBtn() {
   l2.style.transition = "all 233ms";
 }
 
-function closeView() {
-  this.parentElement.parentElement.outerHTML = '';
-}
-
 
 function dragElement() {
   var el = this.parentElement;
@@ -157,6 +153,11 @@ async function playSelection(){
   cbod.appendChild(text);
   text.innerHTML = htmlWords;
 
+  cls.onclick = () => {
+	synth.cancel();
+    cont.outerHTML = '';
+  };
+
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
 	if( ca == 'off' && ca != 'pause' ){
@@ -174,7 +175,7 @@ async function playSelection(){
       play.innerHTML = svgs.pause;
 	  synth.resume();
     }
-  }
+  };
 
 }
 
