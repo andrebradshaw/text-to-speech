@@ -7,6 +7,9 @@ var unq = (arr) => arr.filter((e, p, a) => a.indexOf(e) == p);
 var delay = (ms) => new Promise(res => setTimeout(res, ms));
 var ele = (t) => document.createElement(t);
 var attr = (o, k, v) => o.setAttribute(k, v);
+var reChar = (s) => typeof s == 'string' && s.match(/&#\d+;/g) && s.match(/&#\d+;/g).length > 0 ? s.match(/&#\d+;/g).map(el => [el, String.fromCharCode(reg(/(?<=&#).+?(?=;)/.exec(el),0))]).map(m => s = s.replace(new RegExp(m[0], 'i'), m[1])).pop() : s;
+var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ') : s;
+
 
 var formatDivContentAsString = (s) => s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim();
 
@@ -77,27 +80,39 @@ function getSelectionText() {
   var text = "";
   if (window.getSelection) text = window.getSelection().toString();
   if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
-    return formatDivContentAsString(text);
+    return noHtmlEntities(reChar(formatDivContentAsString(text)));
 }
 
-function getTheVoices(synth) {
-  if (!('SpeechSynthesisUtterance' in window))
-  return synth.getVoices();
-}
-
-async function playSelection(){
-  var selText = getSelectionText() ? getSelectionText() : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.';
-  var synth = window.speechSynthesis;
 
   function showLastWord(pos){
     var spans = Array.from(cn(document,'wordStrmArr'));
-    var targs = spans.slice(0,(pos+5));
+    var targs = spans.slice(0,(pos));
     if(targs && targs.length > 0) {
       targs.forEach(el=> {
         el.style.background = '#08709c';
-      })
+        el.style.borderRadius = '0em';
+      });
+      var last = spans.slice((pos),(pos+11));
+      var i = last.map(el=> /\.|\s/.test(el.innerText)).indexOf(true);
+	  var chop = last.slice(0,i+1);
+      chop.forEach(el=> {
+        el.style.borderRadius = '0em';
+	    el.style.background = '#08709c';
+      });
+	  chop[chop.length-1].style.borderTopRightRadius = '0.9em';
+	  chop[chop.length-1].style.borderBottomRightRadius = '0.9em';
+	  chop[chop.length-1].style.background = '#08709c';
+
     }
   }
+
+async function playSelection(){
+var textDefault = 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too... You monster.';
+
+  var selText = getSelectionText() ? getSelectionText() : textDefault;
+  var synth = window.speechSynthesis;
+
+
 
   if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
 
@@ -119,7 +134,7 @@ async function playSelection(){
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
   attr(speed,'style','grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
-  speed.innerText = '1.7';
+  speed.innerText = '1.2';
   head.appendChild(speed);
 
   var play = ele('div');
@@ -142,7 +157,7 @@ async function playSelection(){
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto;`);
+  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto; padding: 12px;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
@@ -151,20 +166,20 @@ async function playSelection(){
     cont.outerHTML = '';
   };
 
-  var pi = 1.3;
+  var pi = 1;
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
 	if( ca == 'off' ){
       text.innerHTML = '<span class="wordStrmArr">'+formatDivContentAsString(text.innerHTML).split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
 
-	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.');
+	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
 
       utterThis.pitch = pi;
 
       var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)),0).toString() : 1.3;
 
       utterThis.rate = rate;
-
+	  utterThis.lang = 'en-GB';
       utterThis.onend = (e) => {
         if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
         window.speechSynthesis.cancel();
