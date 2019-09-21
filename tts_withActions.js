@@ -99,10 +99,11 @@ function getSelectionText() {
         el.style.borderRadius = '0em';
 	    el.style.background = '#08709c';
       });
+    if(chop[chop.length-1]){
 	  chop[chop.length-1].style.borderTopRightRadius = '0.9em';
 	  chop[chop.length-1].style.borderBottomRightRadius = '0.9em';
 	  chop[chop.length-1].style.background = '#08709c';
-
+    }
     }
   }
 
@@ -173,19 +174,20 @@ var textDefault = 'This is a test of speaking like a human. Hopefully this will 
       text.innerHTML = '<span class="wordStrmArr">'+formatDivContentAsString(text.innerHTML).split("").reduce((a,b)=> a+`</span><span class="wordStrmArr">`+b) + '</span>';
 
 	  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
-
+	  utterThis.lang = 'en-GB';
       utterThis.pitch = pi;
 
       var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)),0).toString() : 1.3;
 
       utterThis.rate = rate;
-	  utterThis.lang = 'en-GB';
+
       utterThis.onend = (e) => {
         if(gi(document,'tts_viewer_pop')) gi(document,'tts_viewer_pop').outerHTML = '';
         window.speechSynthesis.cancel();
       };
 
       utterThis.onboundary = (e) => {
+		console.log(e.charIndex);
         showLastWord(e.charIndex);
       };
 
