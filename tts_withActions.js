@@ -11,7 +11,7 @@ var reChar = (s) => typeof s == 'string' && s.match(/&#\d+;/g) && s.match(/&#\d+
 var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ') : s;
 
 
-var formatDivContentAsString = (s) => s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim();
+var formatDivContentAsString = (s) => noHtmlEntities(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim());
 
 var svgs = {
   close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
@@ -225,6 +225,7 @@ async function playSelection() {
   text.innerHTML = selText;
 
   cls.onclick = () => {
+    gi(document, 'selection_window').outerHTML = '';
     synth.cancel();
     cont.outerHTML = '';
   };
@@ -237,31 +238,23 @@ async function playSelection() {
 
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
-
       utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
       utterThis.lang = lang;
       utterThis.pitch = pi;
-
       var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0).toString() : 1.3;
-
       utterThis.rate = rate;
-
       utterThis.onend = (e) => {
         if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
         window.speechSynthesis.cancel();
       };
-
       utterThis.onboundary = (e) => {
         console.log(e.charIndex);
         showLastWord(e.charIndex);
       };
-
       attr(text, 'contentEditable', 'false');
       attr(play, 'playing', 'pause');
       play.innerHTML = svgs.pause;
-
       synth.speak(utterThis);
-
     }
 
     if (ca == 'pause' && ca != 'off') {
@@ -272,7 +265,6 @@ async function playSelection() {
 
     if (ca == 'play' && ca != 'off') {
       attr(play, 'playing', 'pause');
-
       play.innerHTML = svgs.pause;
       synth.resume();
     }
