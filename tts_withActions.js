@@ -12,11 +12,11 @@ var formatDivContentAsString = (s) => s.replace(/<span>|<br>/g, '\n').replace(/<
 
 var svgs= {
 	close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
-	play:`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 100.25 100.25" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve">
+	play:`<svg version="1.1" x="0px" y="0px" viewBox="0 0 101 101" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve">
 <g>	<path fill="#14b370" d="M69.817,48.243l-30-19.5c-0.461-0.3-1.05-0.322-1.533-0.061c-0.483,0.263-0.785,0.769-0.785,1.318v39   c0,0.55,0.301,1.056,0.785,1.318c0.224,0.121,0.47,0.182,0.715,0.182c0.285,0,0.57-0.081,0.817-0.242l30-19.5   c0.426-0.276,0.683-0.75,0.683-1.258S70.243,48.519,69.817,48.243z M40.5,66.237V32.764L66.248,49.5L40.5,66.237z"/>
 	<path fill="#14b370"  d="M49.5,6.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,6.5,49.5,6.5z M49.5,89.5   c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,89.5,49.5,89.5z"/>
 </g></svg>`,
-	pause: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129">  <g>    <g>   <path fill="#eb4034" d="m64.5,122.6c32.1,0 58.1-26.1 58.1-58.1s-26-58.1-58.1-58.1-58.1,26-58.1,58.1 26,58.1 58.1,58.1zm0-108.1c27.5,0 50,22.4 50,50s-22.4,50-50,50-50-22.4-50-50 22.5-50 50-50z"/>      <path fill="#eb4034" d="m53.8,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c7.10543e-15,2.3 1.8,4.1 4.1,4.1z"/>      <path fill="#eb4034" d="m75.2,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c-1.42109e-14,2.3 1.8,4.1 4.1,4.1z"/>    </g>  </g></svg>`
+	pause: `<svg version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129">  <g>    <g>   <path fill="#eb4034" d="m64.5,122.6c32.1,0 58.1-26.1 58.1-58.1s-26-58.1-58.1-58.1-58.1,26-58.1,58.1 26,58.1 58.1,58.1zm0-108.1c27.5,0 50,22.4 50,50s-22.4,50-50,50-50-22.4-50-50 22.5-50 50-50z"/>      <path fill="#eb4034" d="m53.8,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c7.10543e-15,2.3 1.8,4.1 4.1,4.1z"/>      <path fill="#eb4034" d="m75.2,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c-1.42109e-14,2.3 1.8,4.1 4.1,4.1z"/>    </g>  </g></svg>`
   };
 
 
@@ -80,6 +80,11 @@ function getSelectionText() {
     return formatDivContentAsString(text);
 }
 
+function getTheVoices(synth) {
+  if (!('SpeechSynthesisUtterance' in window))
+  return synth.getVoices();
+}
+
 async function playSelection(){
   var selText = getSelectionText() ? getSelectionText() : 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too.';
   var synth = window.speechSynthesis;
@@ -102,7 +107,7 @@ async function playSelection(){
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head,'style',`display: grid; grid-template-columns: ${(5*16)}px ${(4*16)}px 430px 33px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
+  attr(head,'style',`display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 446px 33px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -113,7 +118,7 @@ async function playSelection(){
 
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
-  attr(speed,'style','grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text;');
+  attr(speed,'style','grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
   speed.innerText = '1.7';
   head.appendChild(speed);
 
@@ -137,7 +142,7 @@ async function playSelection(){
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; max-height: ${(screen.height *0.8)}px; overflow-y: auto;`);
+  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
@@ -146,7 +151,7 @@ async function playSelection(){
     cont.outerHTML = '';
   };
 
-  var pi = 1;
+  var pi = 1.3;
   play.onclick = ()=> {
     var ca = play.getAttribute('playing');
 	if( ca == 'off' ){
@@ -172,6 +177,7 @@ async function playSelection(){
       attr(text, 'contentEditable', 'false');
       attr(play,'playing','pause');
       play.innerHTML = svgs.pause;
+
 	  synth.speak(utterThis);
 
     }
@@ -184,6 +190,7 @@ async function playSelection(){
 
 	if( ca == 'play' && ca != 'off' ){
       attr(play,'playing','pause');
+
       play.innerHTML = svgs.pause;
 	  synth.resume();
     }
