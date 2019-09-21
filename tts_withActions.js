@@ -137,7 +137,7 @@ async function playSelection(){
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left;`);
+  attr(text, 'style', `background: #064d6b; color: #fff; padding: 10px; text-align: left; max-height: ${(screen.height *0.8)}px; overflow-y: auto;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
@@ -156,7 +156,7 @@ async function playSelection(){
 
       utterThis.pitch = pi;
 
-      var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)),0).toString() : 1.7;
+      var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)),0).toString() : 1.3;
 
       utterThis.rate = rate;
 
