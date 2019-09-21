@@ -165,10 +165,8 @@ function selectLang() {
 
 async function playSelection() {
   var textDefault = 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too... You monster.';
-
   var selText = getSelectionText() ? getSelectionText() : textDefault;
   var synth = window.speechSynthesis;
-
   if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
 
   var cont = ele('div');
@@ -248,7 +246,6 @@ async function playSelection() {
         window.speechSynthesis.cancel();
       };
       utterThis.onboundary = (e) => {
-        console.log(e.charIndex);
         showLastWord(e.charIndex);
       };
       attr(text, 'contentEditable', 'false');
