@@ -20,7 +20,8 @@ var svgs = {
 <g>	<path fill="#14b370" d="M69.817,48.243l-30-19.5c-0.461-0.3-1.05-0.322-1.533-0.061c-0.483,0.263-0.785,0.769-0.785,1.318v39   c0,0.55,0.301,1.056,0.785,1.318c0.224,0.121,0.47,0.182,0.715,0.182c0.285,0,0.57-0.081,0.817-0.242l30-19.5   c0.426-0.276,0.683-0.75,0.683-1.258S70.243,48.519,69.817,48.243z M40.5,66.237V32.764L66.248,49.5L40.5,66.237z"/>
 	<path fill="#14b370"  d="M49.5,6.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,6.5,49.5,6.5z M49.5,89.5   c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,89.5,49.5,89.5z"/>
 </g></svg>`,
-  pause: `<svg version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129">  <g>    <g>   <path fill="#eb4034" d="m64.5,122.6c32.1,0 58.1-26.1 58.1-58.1s-26-58.1-58.1-58.1-58.1,26-58.1,58.1 26,58.1 58.1,58.1zm0-108.1c27.5,0 50,22.4 50,50s-22.4,50-50,50-50-22.4-50-50 22.5-50 50-50z"/>      <path fill="#eb4034" d="m53.8,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c7.10543e-15,2.3 1.8,4.1 4.1,4.1z"/>      <path fill="#eb4034" d="m75.2,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c-1.42109e-14,2.3 1.8,4.1 4.1,4.1z"/>    </g>  </g></svg>`
+  pause: `<svg version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129">  <g>    <g>   <path fill="#eb4034" d="m64.5,122.6c32.1,0 58.1-26.1 58.1-58.1s-26-58.1-58.1-58.1-58.1,26-58.1,58.1 26,58.1 58.1,58.1zm0-108.1c27.5,0 50,22.4 50,50s-22.4,50-50,50-50-22.4-50-50 22.5-50 50-50z"/>      <path fill="#eb4034" d="m53.8,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c7.10543e-15,2.3 1.8,4.1 4.1,4.1z"/>  <path fill="#eb4034" d="m75.2,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c-1.42109e-14,2.3 1.8,4.1 4.1,4.1z"/>    </g>  </g></svg>`,
+  stop: `<svg version="1.1" x="0px" y="0px" viewBox="0 0 100.25 100.25" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve"><g><path fill="#eb4034" d="M49.5,7.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,7.5,49.5,7.5z M49.5,90.5 c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,90.5,49.5,90.5z"/><path fill="#eb4034" d="M65,33.5H34c-0.829,0-1.5,0.672-1.5,1.5v31c0,0.828,0.671,1.5,1.5,1.5h31c0.829,0,1.5-0.672,1.5-1.5V35   C66.5,34.172,65.829,33.5,65,33.5z M63.5,64.5h-28v-28h28V64.5z"/></g></svg>`
 };
 
 
@@ -150,8 +151,7 @@ function languageSelector() {
   for (var i = 0; i < opts.length; i++) {
     var langOptions = ele('div');
     attr(langOptions, 'dataLang', opts[i][0]);
-    attr(langOptions, 'style', `padding: 4px; cursor: pointer; border: 1.2px solid #7c7c7c; background: #fff; color: #7c7c7c; 
-${(i == 0) ? 'border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;' : (i == opts.length-1) ? 'border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em;' : ''}`);
+    attr(langOptions, 'style', `padding: 4px; cursor: pointer; border: 1.2px solid #15536e; background: #fff; color: #15536e; ${(i == 0) ? 'border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;' : (i == opts.length-1) ? 'border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em;' : ''}`);
     langOptions.innerText = opts[i][1];
     langOptions.onclick = selectLang;
     selWindow.appendChild(langOptions);
@@ -181,7 +181,7 @@ async function playSelection() {
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 200px 246px 33px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
+  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 200px 213px 33px 33px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -197,7 +197,7 @@ async function playSelection() {
   head.appendChild(speed);
 
   var lang_ = ele('div');
-  attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #7c7c7c; color: #fff; border: 1px solid transparent; border-radius: 0.2em; padding: 4px; cursor: pointer; transform: scale(0.8, 0.8);'`);
+  attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #15536e; color: #fff; border: 1px solid #073b52; border-radius: 0.2em; cursor: pointer; transform: scale(0.8, 0.8); padding: 8px; box-shadow: 1px 1px 1px 1px #043347;`);
   attr(lang_, 'id', 'language_selection');
   attr(lang_,'dataLang','en-US');
   lang_.innerText = 'English US';
@@ -210,8 +210,17 @@ async function playSelection() {
   play.innerHTML = svgs.play;
   head.appendChild(play);
 
+  var stp = ele('div');
+  attr(stp, 'style', `grid-area: 1 / 6; width: 28px; height: 28px; cursor: pointer;`);
+  stp.innerHTML = svgs.stop;
+  head.appendChild(stp);
+  stp.onclick = () =>{
+    synth.cancel();
+    attr(play, 'playing', 'off');
+  };
+
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 6; width: 33px; height: 33px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 7; width: 33px; height: 33px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -235,6 +244,8 @@ async function playSelection() {
   };
 
   var pi = 1;
+
+
   play.onclick = () => {
     var lang = gi(document,'language_selection').getAttribute('datalang');
     var ca = play.getAttribute('playing');
@@ -271,10 +282,6 @@ async function playSelection() {
     }
 
     if (ca == 'play' && ca != 'off') {
-      var lang = gi(document,'language_selection').getAttribute('datalang');
-      utterThis.lang = lang;
-      var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0).toString() : 1.3;
-      utterThis.rate = rate;
       attr(play, 'playing', 'pause');
       play.innerHTML = svgs.pause;
       synth.resume();
