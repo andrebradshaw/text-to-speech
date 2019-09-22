@@ -182,7 +182,7 @@ function languageSelector() {
   var rect = this.getBoundingClientRect();
   var selWindow = ele('div');
   attr(selWindow, 'id', 'selection_window');
-  attr(selWindow, 'style', `position: fixed; top: ${rect.top}px; left: ${rect.left}px; padding: 4px; z-index: 15211; border-radius: 0.3em;`);
+  attr(selWindow, 'style', `position: fixed; top: ${rect.top}px; left: ${rect.left}px; padding: 4px; z-index: ${new Date().getTime()}; border-radius: 0.3em;`);
   document.body.appendChild(selWindow);
   selWindow.onmouseleave = ()=> {
     if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
