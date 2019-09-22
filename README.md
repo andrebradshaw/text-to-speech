@@ -2,10 +2,13 @@
 This tool allows a user to select text on a web page and play machine generated speech.
 
 Current version automatically grabs text from articles within the following websites:
-  Reuters
-  Rolling Stone  
-  Washington Post 
-  New York Times
+  1) Reuters
+  2) Rolling Stone  
+  3) Washington Post 
+  4) New York Times
+  5) CBC
+  6) LA Times
+  7) BBC
 
 Sub folders within this repo are other projects. The bookmarklet_selected_text_to_speech.txt file is the one you want.
 
