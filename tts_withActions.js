@@ -91,21 +91,22 @@ function showLastWord(pos) {
   var targs = spans.slice(0, (pos));
   if (targs && targs.length > 0) {
     targs.forEach(el => {
-      el.style.background = '#08709c';
+      el.style.borderBottom = '1.4px solid #08709c';
       el.style.borderRadius = '0em';
+      el.style.opacity = '.7';
     });
     var last = spans.slice((pos), (pos + 11));
     var i = last.map(el => /\.|\s/.test(el.innerText)).indexOf(true);
     var chop = last.slice(0, i + 1);
     chop.forEach(el => {
       el.style.borderRadius = '0em';
-      el.style.background = '#08709c';
+      el.style.borderBottom = '1.4px solid #08709c';
+      el.style.opacity = '.3';
+      el.style.transition = 'all 296ms';
+      el.addEventListener('transitionend', () => {
+        el.style.opacity = '.7';
+      });
     });
-    if (chop[chop.length - 1]) {
-      chop[chop.length - 1].style.borderTopRightRadius = '0.9em';
-      chop[chop.length - 1].style.borderBottomRightRadius = '0.9em';
-      chop[chop.length - 1].style.background = '#08709c';
-    }
   }
 }
 
@@ -186,7 +187,7 @@ async function playSelection() {
   head.onmouseover = dragElement;
 
   var slab = ele('div');
-  attr(slab, 'style', 'grid-area: 1 / 1; color: #fff; padding: 6px;');
+  attr(slab, 'style', 'grid-area: 1 / 1; color: #fff; padding: 6px; border-radius: 0.4em; text-align: center');
   slab.innerText = 'speed';
   head.appendChild(slab);
 
@@ -232,6 +233,18 @@ async function playSelection() {
   attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto; padding: 18px;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
+
+  speed.onfocus = () => {
+    slab.style.transform = 'translate(10px, 0px)';
+    slab.style.opacity = '.3';
+    slab.style.transition = 'all 133ms ease-in';
+    slab.addEventListener('transitionend', () => {
+      slab.style.opacity = '1';
+    });
+  };
+  speed.onblur = () => {
+    slab.style.transform = 'translate(0px, 0px)';
+  };
 
   stp.onclick = () =>{
     attr(play, 'playing', 'off');
