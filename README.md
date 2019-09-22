@@ -1,7 +1,7 @@
 # text-to-speech
 This tool allows a user to select text on a web page and play machine generated speech.
 
-Current version automatically grabs text from articles within the following websites:
+Current version automatically grabs text from articles within the following websites if no text is selected:
   1) Reuters
   2) Rolling Stone  
   3) Washington Post 
