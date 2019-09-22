@@ -203,7 +203,7 @@ async function playSelection() {
   var lang_ = ele('div');
   attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #15536e; color: #fff; border: 1px solid #073b52; border-radius: 0.2em; cursor: pointer; transform: scale(0.8, 0.8); padding: 8px; box-shadow: 1px 1px 1px 1px #043347;`);
   attr(lang_, 'id', 'language_selection');
-  attr(lang_,'dataLang','en-US');
+  attr(lang_,'datalang','en-US');
   lang_.innerText = 'English US';
   head.appendChild(lang_);
   lang_.onclick = languageSelector;
