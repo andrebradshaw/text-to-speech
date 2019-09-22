@@ -14,6 +14,16 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function yahooAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText).map(el=> el.innerText);
+  var out = '';
+  for(var i=0; i<elmsText.length; i++){
+    if(/Read more at The Daily Beast./.test(elmsText[i])) {break;}
+    out = out+elmsText[i]+'\n';
+  }
+  return out.trim();
+}
+
 function latimesAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText && /class/.test(el.outerHTML) === false).map(el=> el.innerText.replace(/You've reached your free monthly limi.+/,'')).reduce((a,b)=> a+'\n'+b);
   return elmsText.trim();
@@ -68,6 +78,7 @@ async function grabTextContent(){
   var iscbc = /\.cbc.ca\/\w+/.test(url);
   var isbbc = /\bbbc\.com\/\w+/.test(url);
   var islatimes = /\blatimes.com\/\w+/.test(url);
+  var isyahoo = /news\.yahoo\.com\/\w+/.test(url);
   if(sel == false && isReuters){
     var sel = reutersAutoText();
   }
@@ -89,7 +100,9 @@ async function grabTextContent(){
   if(sel == false && islatimes){
     var sel = latimesAutoText();
   }
-
+  if(sel == false && isyahoo){
+    var sel = yahooAutoText();
+  }
   return sel;
 }
 
