@@ -14,6 +14,10 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function wpAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText && /class/.test(el.outerHTML) === false).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim();
+}
 
 function reutersAutoText() {
   var elmsText = Array.from(document.querySelectorAll("p, h3")).filter(el=> el.innerText).map(el=> el.innerText.replace(/^[\W\n]*\d+\s*MIN READ[\W\n]*/,'').replace(/.+?Reuters. All Rights Reserved./g,'').replace(/All quotes delayed a minimum of.+/,'').replace(/Subscribe to our daily curated newsletter.+/,'').replace(/REUTERS NEWS NOW/,'')).reduce((a,b)=> a+'\n'+b);
@@ -40,11 +44,15 @@ async function grabTextContent(){
   var url = window.location.href;
   var isReuters = /reuters\.com\/article\/\w/.test(url);
   var isNYT = /nytimes\.com\/\d{4}\//.test(url);
+  var isWP = /washingtonpost\.com/.test(url);
   if(sel == false && isReuters){
     var sel = reutersAutoText();
   }
   if(sel == false && isNYT){
     var sel = await nytAutoText();
+  }
+  if(sel == false && isWP){
+    var sel = wpAutoText();
   }
   return sel;
 }
