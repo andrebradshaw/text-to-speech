@@ -70,7 +70,7 @@ function getSelectionText() {
 
 function economistAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
-  return elmsText.trim().replace(/You’ve seen the news, now discover the story[\w\W\n]*/,'');
+  return elmsText.trim().replace(/You’ve seen the news, now discover the story[\w\W\n]*/,'').replace(/Upgrade your inbox and get our Daily Dispatch and Editor's Picks./,'');
 }
 
 async function grabTextContent(){ 
