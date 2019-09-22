@@ -68,6 +68,11 @@ function getSelectionText() {
   return text;
 }
 
+function economistAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim().replace(/You’ve seen the news, now discover the story[\w\W\n]*/,'');
+}
+
 async function grabTextContent(){ 
   var sel = getSelectionText().trim();
   var url = window.location.href;
@@ -79,6 +84,7 @@ async function grabTextContent(){
   var isbbc = /\bbbc\.com\/\w+/.test(url);
   var islatimes = /\blatimes.com\/\w+/.test(url);
   var isyahoo = /news\.yahoo\.com\/\w+/.test(url);
+  var isecon = /\beconomist.com\/\w/.test(url);
   if(sel == false && isReuters){
     var sel = reutersAutoText();
   }
@@ -102,6 +108,9 @@ async function grabTextContent(){
   }
   if(sel == false && isyahoo){
     var sel = yahooAutoText();
+  }
+  if(sel == false && isecon){
+    var sel = economistAutoText();
   }
   return sel;
 }
@@ -266,7 +275,7 @@ async function playSelection() {
 
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
-  attr(cont, 'style', `position: fixed; top: 10%; left: 60px; width: 680px; z-index: ${new Date().getTime()}; font-size: 16px; font-family: "Georgia", Sarif;`);
+  attr(cont, 'style', `position: fixed; top: 10px; left: 60px; width: 680px; z-index: ${new Date().getTime()}; font-size: 16px; font-family: "Georgia", Sarif;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
