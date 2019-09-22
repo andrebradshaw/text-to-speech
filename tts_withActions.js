@@ -12,7 +12,43 @@ function reChar(s) {	return typeof s == 'string' && s.match(/&#\d+;/g) && s.matc
 var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ') : s;
 
 
-var formatDivContentAsString = (s) => noHtmlEntities(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim());
+var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
+
+
+function reutersAutoText() {
+  var elmsText = Array.from(document.querySelectorAll("p, h3")).filter(el=> el.innerText).map(el=> el.innerText.replace(/^[\W\n]*\d+\s*MIN READ[\W\n]*/,'').replace(/.+?Reuters. All Rights Reserved./g,'').replace(/All quotes delayed a minimum of.+/,'').replace(/Subscribe to our daily curated newsletter.+/,'').replace(/REUTERS NEWS NOW/,'')).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim();
+}
+
+async function nytAutoText() {
+  var res = await fetch(window.location.href);
+  var text = await res.text();
+  var doc = new DOMParser().parseFromString(text,'text/html');
+  var paras = Array.from(tn(doc,'p')).map(el=> el.innerText.replace(/^[\W\n]*Advertisement[\W\n]*$|^[\W\n]*Supported by[\W\n]*$/g,'')).reduce((a,b)=> a+'\n'+b).replace(/\[.+?\]/g, '');
+  return paras.trim();
+}
+
+function getSelectionText() {
+  var text = "";
+  if (window.getSelection) text = window.getSelection().toString();
+  if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
+  return text;
+}
+
+async function grabTextContent(){ 
+  var sel = getSelectionText().trim();
+  var url = window.location.href;
+  var isReuters = /reuters\.com\/article\/\w/.test(url);
+  var isNYT = /nytimes\.com\/\d{4}\//.test(url);
+  if(sel == false && isReuters){
+    var sel = reutersAutoText();
+  }
+  if(sel == false && isNYT){
+    var sel = await nytAutoText();
+  }
+  return sel;
+}
+
 
 var svgs = {
   close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
@@ -77,14 +113,6 @@ function dragElement() {
     el.style.opacity = "1";
   }
 }
-
-function getSelectionText() {
-  var text = "";
-  if (window.getSelection) text = window.getSelection().toString();
-  if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
-  return noHtmlEntities(reChar(formatDivContentAsString(text)));
-}
-
 
 function showLastWord(pos) {
   var spans = Array.from(cn(document, 'wordStrmArr'));
@@ -175,13 +203,14 @@ function selectLang() {
 
 async function playSelection() {
   var textDefault = 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too... You monster.';
-  var selText = getSelectionText() ? getSelectionText() : textDefault;
+  var selectedWinText = await grabTextContent();
+  var selText = selectedWinText ? selectedWinText : textDefault;
   var synth = window.speechSynthesis;
   if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
 
   var cont = ele('div');
   attr(cont, 'id', 'tts_viewer_pop');
-  attr(cont, 'style', `position: fixed; top: 10%; left: 60px; width: 680px; z-index: 13120; font-size: 16px; font-family: "Georgia", Sarif;`);
+  attr(cont, 'style', `position: fixed; top: 10%; left: 60px; width: 680px; z-index: ${new Date().getTime()}; font-size: 16px; font-family: "Georgia", Sarif;`);
   document.body.appendChild(cont);
 
   var head = ele('div');
