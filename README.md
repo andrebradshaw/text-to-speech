@@ -10,6 +10,7 @@ Current version automatically grabs text from articles within the following webs
   6) LA Times
   7) BBC
   8) Yahoo News
+  9) The Economist
 
 Sub folders within this repo are other projects. The bookmarklet_selected_text_to_speech.txt file is the one you want.
 
