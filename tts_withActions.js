@@ -14,7 +14,15 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function bbcAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText && /class/.test(el.outerHTML) === false).map(el=> el.innerText.replace(/Accessibility links/,'')).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim();
+}
 
+function cbcAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText.replace(/^[\W\n]*Audience Relations, CBC/,'').replace(/^[\W\n]*P.O. Box 500 Station A/,'').replace(/^[\W\n]*Toronto, ON/,'').replace(/^[\W\n]*Canada, M5W 1E6/,'').replace(/^[\W\n]*Toll-free.+/,'').replace(/^[\W\n]*1-866.+/g, '').replace(/1-866-220-6045/g, '').replace(/^[\W\n]*TTY\/Teletype write.+/, '').replace(/^[\W\n]*It is a priority for CBC to create a website that is accessible to all Canadians including people with visual, hearing, motor and cognitive challenges./, '').replace(/^[\W\n]*Closed Captioning and Described Video is available for many CBC shows offered on CBC Gem./, '').replace(/Welcome to your feed!.+/,'').replace(/To encourage thoughtful and respectful conversations, first and last names.+/,'').replace(/By submitting a comment, you accept that CBC has the right.+/,'')).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim();
+}
 function rollstoneAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText.replace(/In This Article.*/,'').replace(/Want more Rolling Stone.*/,'').replace(/Newsletter Signup.*/,'').replace(/Have a Tip.*/,'')).reduce((a,b)=> a+'\n'+b);
   return elmsText.trim();
@@ -52,6 +60,8 @@ async function grabTextContent(){
   var isNYT = /nytimes\.com\/\d{4}\//.test(url);
   var isWP = /washingtonpost\.com/.test(url);
   var isRolling = /rollingstone\.com\/\w+/.test(url);
+  var iscbc = /\.cbc.ca\/\w+/.test(url);
+  var isbbc = /\bbbc\.com\/\w+/.test(url);
   if(sel == false && isReuters){
     var sel = reutersAutoText();
   }
@@ -64,10 +74,14 @@ async function grabTextContent(){
   if(sel == false && isRolling){
     var sel = rollstoneAutoText();
   }
+  if(sel == false && iscbc){
+    var sel = cbcAutoText();
+  }
+  if(sel == false && isbbc){
+    var sel = bbcAutoText();
+  }
   return sel;
 }
-
-
 
 var svgs = {
   close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
