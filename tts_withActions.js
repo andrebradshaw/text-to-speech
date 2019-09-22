@@ -142,6 +142,10 @@ function languageSelector() {
   attr(selWindow, 'id', 'selection_window');
   attr(selWindow, 'style', `position: fixed; top: ${rect.top}px; left: ${rect.left}px; padding: 4px; z-index: 15211;`);
   document.body.appendChild(selWindow);
+  selWindow.onmouseleave = ()=> {
+    if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
+  };
+
   for (var i = 0; i < opts.length; i++) {
     var langOptions = ele('div');
     attr(langOptions, 'dataLang', opts[i][0]);
@@ -191,10 +195,10 @@ async function playSelection() {
   head.appendChild(speed);
 
   var lang_ = ele('div');
-  attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #7c7c7c; color: #fff; border: 1px solid transparent; border-radius: 0.2em; padding: 4px; cursor: pointer;`);
+  attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #7c7c7c; color: #fff; border: 1px solid transparent; border-radius: 0.2em; padding: 4px; cursor: pointer; transform: scale(0.8, 0.8);'`);
   attr(lang_, 'id', 'language_selection');
   attr(lang_,'dataLang','en-US');
-  lang_.innerText = 'Change language';
+  lang_.innerText = 'English US';
   head.appendChild(lang_);
   lang_.onclick = languageSelector;
 
@@ -205,7 +209,7 @@ async function playSelection() {
   head.appendChild(play);
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 6; width: 31px; height: 31px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 6; width: 33px; height: 33px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -218,7 +222,7 @@ async function playSelection() {
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto; padding: 12px;`);
+  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.8)}px; overflow-y: auto; padding: 18px;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
@@ -231,23 +235,27 @@ async function playSelection() {
   var pi = 1;
   play.onclick = () => {
     var lang = gi(document,'language_selection').getAttribute('datalang');
-
     var ca = play.getAttribute('playing');
 
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
+
       utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
       utterThis.lang = lang;
       utterThis.pitch = pi;
+
       var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0).toString() : 1.3;
       utterThis.rate = rate;
+
       utterThis.onend = (e) => {
         if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
         window.speechSynthesis.cancel();
       };
+
       utterThis.onboundary = (e) => {
         showLastWord(e.charIndex);
       };
+
       attr(text, 'contentEditable', 'false');
       attr(play, 'playing', 'pause');
       play.innerHTML = svgs.pause;
@@ -261,6 +269,10 @@ async function playSelection() {
     }
 
     if (ca == 'play' && ca != 'off') {
+      var lang = gi(document,'language_selection').getAttribute('datalang');
+      utterThis.lang = lang;
+      var rate = /[\d\.]+/.test(formatDivContentAsString(speed.innerHTML)) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0).toString() : 1.3;
+      utterThis.rate = rate;
       attr(play, 'playing', 'pause');
       play.innerHTML = svgs.pause;
       synth.resume();
