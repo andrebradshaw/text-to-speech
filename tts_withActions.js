@@ -140,7 +140,7 @@ function languageSelector() {
   var rect = this.getBoundingClientRect();
   var selWindow = ele('div');
   attr(selWindow, 'id', 'selection_window');
-  attr(selWindow, 'style', `position: fixed; top: ${rect.top}px; left: ${rect.left}px; padding: 4px; z-index: 15211;`);
+  attr(selWindow, 'style', `position: fixed; top: ${rect.top}px; left: ${rect.left}px; padding: 4px; z-index: 15211; border-radius: 0.3em;`);
   document.body.appendChild(selWindow);
   selWindow.onmouseleave = ()=> {
     if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
@@ -149,7 +149,8 @@ function languageSelector() {
   for (var i = 0; i < opts.length; i++) {
     var langOptions = ele('div');
     attr(langOptions, 'dataLang', opts[i][0]);
-    attr(langOptions, 'style', `padding: 4px; borderRadius: 0.3em; cursor: pointer; border: 1.2px solid #7c7c7c; background: #fff; color: #7c7c7c`);
+    attr(langOptions, 'style', `padding: 4px; cursor: pointer; border: 1.2px solid #7c7c7c; background: #fff; color: #7c7c7c; 
+${(i == 0) ? 'border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;' : (i == opts.length-1) ? 'border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em;' : ''}`);
     langOptions.innerText = opts[i][1];
     langOptions.onclick = selectLang;
     selWindow.appendChild(langOptions);
@@ -184,7 +185,7 @@ async function playSelection() {
   head.onmouseover = dragElement;
 
   var slab = ele('div');
-  attr(slab, 'style', 'grid-area: 1 / 1; width: 28px; color: #fff; padding: 6px;');
+  attr(slab, 'style', 'grid-area: 1 / 1; color: #fff; padding: 6px;');
   slab.innerText = 'speed';
   head.appendChild(slab);
 
