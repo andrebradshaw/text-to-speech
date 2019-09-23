@@ -11,6 +11,10 @@ Current version automatically grabs text from articles within the following webs
   7) BBC
   8) Yahoo News
   9) The Economist
+  10) Harvard Gazette
+
+UPDATES: Content, speed and language is editable while the script is stopped, but not while paused.
+
 
 Sub folders within this repo are other projects. The bookmarklet_selected_text_to_speech.txt file is the one you want.
 
