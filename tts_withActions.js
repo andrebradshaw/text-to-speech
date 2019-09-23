@@ -77,33 +77,15 @@ async function grabTextContent(){
   var sel = getSelectionText().trim();
   var url = window.location.href;
   if(sel == false){
-    if(/reuters\.com\/article\/\w/.test(url)){
-      var sel = reutersAutoText();
-    }
-    if(/nytimes\.com\/\d{4}\//.test(url)){
-      var sel = await nytAutoText();
-    }
-    if(/washingtonpost\.com/.test(url)){
-      var sel = wpAutoText();
-    }
-    if(/rollingstone\.com\/\w+/.test(url)){
-      var sel = rollstoneAutoText();
-    }
-    if(/\.cbc.ca\/\w+/.test(url)){
-      var sel = cbcAutoText();
-    }
-    if(/\bbbc\.com\/\w+/.test(url)){
-      var sel = bbcAutoText();
-    }
-    if(/\blatimes.com\/\w+/.test(url)){
-      var sel = latimesAutoText();
-    }
-    if(/news\.yahoo\.com\/\w+/.test(url)){
-      var sel = yahooAutoText();
-    }
-    if(/\beconomist.com\/\w/.test(url)){
-      var sel = economistAutoText();
-    }
+    if(/reuters\.com\/article\/\w/.test(url)) var sel = reutersAutoText();
+    if(/washingtonpost\.com/.test(url)) var sel = wpAutoText();
+    if(/rollingstone\.com\/\w+/.test(url)) var sel = rollstoneAutoText();
+    if(/\.cbc.ca\/\w+/.test(url)) var sel = cbcAutoText();
+    if(/\bbbc\.com\/\w+/.test(url)) var sel = bbcAutoText();
+    if(/\blatimes.com\/\w+/.test(url)) var sel = latimesAutoText();
+    if(/news\.yahoo\.com\/\w+/.test(url)) var sel = yahooAutoText();
+    if(/\beconomist.com\/\w/.test(url)) var sel = economistAutoText();
+    if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
   return sel;
 }
@@ -146,14 +128,12 @@ function dragElement() {
     pos4 = 0;
   if (document.getElementById(this.id)) document.getElementById(this.id).onmousedown = dragMouseDown;
   else this.onmousedown = dragMouseDown;
-
   function dragMouseDown(e) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
   }
-
   function elementDrag(e) {
     pos1 = pos3 - e.clientX;
     pos2 = pos4 - e.clientY;
@@ -164,7 +144,6 @@ function dragElement() {
     el.style.opacity = "0.85";
     el.style.transition = "opacity 700ms";
   }
-
   function closeDragElement() {
     document.onmouseup = null;
     document.onmousemove = null;
@@ -180,6 +159,7 @@ function showLastWord(pos) {
       el.style.borderBottom = '1.4px solid #08709c';
       el.style.borderRadius = '0em';
       el.style.opacity = '.7';
+      el.style.fontSize = '.7em';
     });
     var last = spans.slice((pos), (pos + 11));
     var i = last.map(el => /”|,|\.|\s/.test(el.innerText)).indexOf(true);
@@ -188,6 +168,7 @@ function showLastWord(pos) {
       el.style.borderRadius = '0em';
       el.style.borderBottom = '1.4px solid #08709c';
       el.style.opacity = '.3';
+      el.style.fontSize = '.7em';
       el.style.transition = 'all 206ms';
       el.addEventListener('transitionend', () => {
         el.style.opacity = '.7';
@@ -237,7 +218,6 @@ function languageSelector() {
   selWindow.onmouseleave = ()=> {
     if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
   };
-
   for (var i = 0; i < opts.length; i++) {
     var langOptions = ele('div');
     attr(langOptions, 'dataLang', opts[i][0]);
@@ -272,7 +252,7 @@ async function playSelection() {
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 200px 219px 30px 30px 33px; grid-gap: 1%; background: #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
+  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 200px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -320,14 +300,14 @@ async function playSelection() {
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.7)}px; overflow-y: auto; padding: 18px;`);
+  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border: 1.6px solid #041e29; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.7)}px; overflow-y: auto; padding: 18px;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
   speed.onfocus = () => {
     slab.style.transform = 'translate(10px, 0px)';
     slab.style.opacity = '.3';
-    slab.style.transition = 'all 133ms ease-in';
+    slab.style.transition = 'all 53ms ease-in';
     slab.addEventListener('transitionend', () => {
       slab.style.opacity = '1';
     });
