@@ -183,6 +183,7 @@ function showLastWord(pos) {
   }
 }
 
+
 var opts = [
   ["de-DE", "Deutsch"],
   ["en-US", "English US"],
@@ -249,7 +250,6 @@ async function playSelection() {
   var textDefault = 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too... You monster.';
   var selectedWinText = await grabTextContent();
   var selText = selectedWinText ? selectedWinText : textDefault;
-  var synth = window.speechSynthesis;
   if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
 
   var cont = ele('div');
@@ -269,6 +269,7 @@ async function playSelection() {
 
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
+  attr(speed, 'id', 'speed_selection');
   attr(speed, 'style', 'grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
   speed.innerText = '1.7';
   head.appendChild(speed);
@@ -283,6 +284,7 @@ async function playSelection() {
 
   var play = ele('div');
   attr(play, 'playing', 'off');
+  attr(play, 'id', 'play_btn_');
   attr(play, 'style', `grid-area: 1 / 5; width: 28px; height: 28px; cursor: pointer;`);
   play.innerHTML = svgs.play;
   head.appendChild(play);
@@ -323,8 +325,10 @@ async function playSelection() {
   };
 
   stp.onclick = () =>{
-    attr(play, 'playing', 'off');
+    attr(text, 'contentEditable', 'true');
+    attr(play, 'playing', 'stopped');
     synth.cancel();
+    play.innerHTML = svgs.play;
   };
 
   cls.onclick = () => {
@@ -338,31 +342,17 @@ async function playSelection() {
   play.onclick = () => {
     var lang = gi(document,'language_selection').getAttribute('datalang');
     var ca = play.getAttribute('playing');
+    var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
 
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
-      var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
-
-      utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
-      utterThis.lang = lang;
-      utterThis.pitch = pi;
-      utterThis.rate = rate;
-
-      utterThis.onend = (e) => {
-        if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
-        window.speechSynthesis.cancel();
-      };
-
-      utterThis.onboundary = (e) => {
-        showLastWord(e.charIndex);
-      };
-
-      attr(text, 'contentEditable', 'false');
-      attr(play, 'playing', 'pause');
+      initSpeech(ca);
       play.innerHTML = svgs.pause;
-      synth.speak(utterThis);
     }
-
+    if (ca == 'stopped') {
+      initSpeech(ca);
+      play.innerHTML = svgs.pause;
+    }
     if (ca == 'pause' && ca != 'off') {
       attr(play, 'playing', 'play');
       play.innerHTML = svgs.play;
@@ -377,5 +367,46 @@ async function playSelection() {
   };
 
 }
+function addSpansToText(textElm){
+  textElm.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(textElm.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
+}
 
+function initSpeech(status){
+  var text = gi(document,'tts_viewer_text');
+  var play = gi(document,'play_btn_');
+  var speed = gi(document,'speed_selection').innerText;
+  var lang = gi(document,'language_selection').getAttribute('datalang');
+  var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
+  if(status == 'stopped'){
+    var textElm = gi(document,'tts_viewer_text');
+    var spans = Array.from(tn(textElm,'span')).filter(el=> el.style.borderBottomStyle == 'solid');
+    spans.pop();
+    spans.reverse();
+    var pos = ( (spans.length) - (spans.map(el => /\s/.test(el.innerText)).indexOf(true)) ) -1;
+console.log(pos);
+    for(var i=0; i<pos; i++){
+	  textElm.removeChild(tn(textElm,'span')[0]);
+    }
+    addSpansToText(gi(document,'tts_viewer_text'));
+  }
+  synth = window.speechSynthesis;
+
+  utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(gi(document,'tts_viewer_text').innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
+  utterThis.lang = lang;
+  utterThis.pitch = 1;
+  utterThis.rate = rate;
+
+  utterThis.onend = (e) => {
+    synth.cancel();
+  };
+
+  utterThis.onboundary = (e) => {
+    showLastWord(e.charIndex);
+  };
+
+  attr(text, 'contentEditable', 'false');
+  attr(play, 'playing', 'pause');
+  synth.speak(utterThis);
+
+}
 playSelection();
