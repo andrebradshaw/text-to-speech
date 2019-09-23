@@ -76,41 +76,34 @@ function economistAutoText(){
 async function grabTextContent(){ 
   var sel = getSelectionText().trim();
   var url = window.location.href;
-  var isReuters = /reuters\.com\/article\/\w/.test(url);
-  var isNYT = /nytimes\.com\/\d{4}\//.test(url);
-  var isWP = /washingtonpost\.com/.test(url);
-  var isRolling = /rollingstone\.com\/\w+/.test(url);
-  var iscbc = /\.cbc.ca\/\w+/.test(url);
-  var isbbc = /\bbbc\.com\/\w+/.test(url);
-  var islatimes = /\blatimes.com\/\w+/.test(url);
-  var isyahoo = /news\.yahoo\.com\/\w+/.test(url);
-  var isecon = /\beconomist.com\/\w/.test(url);
-  if(sel == false && isReuters){
-    var sel = reutersAutoText();
-  }
-  if(sel == false && isNYT){
-    var sel = await nytAutoText();
-  }
-  if(sel == false && isWP){
-    var sel = wpAutoText();
-  }
-  if(sel == false && isRolling){
-    var sel = rollstoneAutoText();
-  }
-  if(sel == false && iscbc){
-    var sel = cbcAutoText();
-  }
-  if(sel == false && isbbc){
-    var sel = bbcAutoText();
-  }
-  if(sel == false && islatimes){
-    var sel = latimesAutoText();
-  }
-  if(sel == false && isyahoo){
-    var sel = yahooAutoText();
-  }
-  if(sel == false && isecon){
-    var sel = economistAutoText();
+  if(sel == false){
+    if(/reuters\.com\/article\/\w/.test(url)){
+      var sel = reutersAutoText();
+    }
+    if(/nytimes\.com\/\d{4}\//.test(url)){
+      var sel = await nytAutoText();
+    }
+    if(/washingtonpost\.com/.test(url)){
+      var sel = wpAutoText();
+    }
+    if(/rollingstone\.com\/\w+/.test(url)){
+      var sel = rollstoneAutoText();
+    }
+    if(/\.cbc.ca\/\w+/.test(url)){
+      var sel = cbcAutoText();
+    }
+    if(/\bbbc\.com\/\w+/.test(url)){
+      var sel = bbcAutoText();
+    }
+    if(/\blatimes.com\/\w+/.test(url)){
+      var sel = latimesAutoText();
+    }
+    if(/news\.yahoo\.com\/\w+/.test(url)){
+      var sel = yahooAutoText();
+    }
+    if(/\beconomist.com\/\w/.test(url)){
+      var sel = economistAutoText();
+    }
   }
   return sel;
 }
