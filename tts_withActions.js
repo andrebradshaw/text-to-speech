@@ -14,6 +14,11 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function harvardAutoText(){
+  var elmsText = cn(document,'article-body basic-text').length ? Array.from(cn(document,'article-body basic-text')[0].querySelectorAll("p, h2, h3")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b) : '';
+  return elmsText.trim();
+}
+
 function yahooAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText).map(el=> el.innerText);
   var out = '';
@@ -85,6 +90,7 @@ async function grabTextContent(){
     if(/\blatimes.com\/\w+/.test(url)) var sel = latimesAutoText();
     if(/news\.yahoo\.com\/\w+/.test(url)) var sel = yahooAutoText();
     if(/\beconomist.com\/\w/.test(url)) var sel = economistAutoText();
+    if(/news\.harvard\.edu\/\w+/.test(url)) var sel = harvardAutoText();
     if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
   return sel;
@@ -264,7 +270,7 @@ async function playSelection() {
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
   attr(speed, 'style', 'grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
-  speed.innerText = '1.2';
+  speed.innerText = '1.7';
   head.appendChild(speed);
 
   var lang_ = ele('div');
@@ -335,7 +341,7 @@ async function playSelection() {
 
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
-      var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1.3;
+      var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
 
       utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(text.innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
       utterThis.lang = lang;
