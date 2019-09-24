@@ -255,7 +255,7 @@ async function playSelection() {
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 190px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
+  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 190px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -267,12 +267,12 @@ async function playSelection() {
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
   attr(speed, 'id', 'speed_selection');
-  attr(speed, 'style', 'grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
+  attr(speed, 'style', 'text-align: center; height: 40px; grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
   speed.innerText = '1.7';
   head.appendChild(speed);
 
   var lang_ = ele('div');
-  attr(lang_, 'style', `textAlign: center; grid-area: 1 / 4; background: #15536e; color: #fff; border: 1px solid #073b52; border-radius: 0.2em; cursor: pointer; transform: scale(0.8, 0.8); padding: 8px; box-shadow: 1px 1px 1px 1px #043347;`);
+  attr(lang_, 'style', `text-align: center; grid-area: 1 / 4; background: #15536e; color: #fff; border: 1px solid #073b52; border-radius: 0.2em; cursor: pointer; transform: scale(0.8, 0.8); padding: 8px; box-shadow: 1px 1px 1px 1px #043347;`);
   attr(lang_, 'id', 'language_selection');
   attr(lang_,'datalang','en-US');
   lang_.innerText = 'English US';
@@ -312,7 +312,7 @@ async function playSelection() {
   speed.onfocus = () => {
     slab.style.transform = 'translate(10px, 0px)';
     slab.style.opacity = '.3';
-    slab.style.transition = 'all 53ms ease-in';
+    slab.style.transition = 'all 103ms ease-in';
     slab.addEventListener('transitionend', () => {
       slab.style.opacity = '1';
     });
