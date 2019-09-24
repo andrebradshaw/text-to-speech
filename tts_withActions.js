@@ -98,12 +98,9 @@ async function grabTextContent(){
 
 var svgs = {
   close: `<svg x="0px" y="0px" viewBox="0 0 100 100"><g style="transform: scale(0.85, 0.85)" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2, 2)" stroke="#e21212" stroke-width="8"><path d="M47.806834,19.6743435 L47.806834,77.2743435" transform="translate(49, 50) rotate(225) translate(-49, -50) "/><path d="M76.6237986,48.48 L19.0237986,48.48" transform="translate(49, 50) rotate(225) translate(-49, -50) "/></g></g></svg>`,
-  play: `<svg fill="#14b370" x="0px" y="0px" viewBox="0 0 101 101">
-<g>	<path fill="#14b370" d="M69.817,48.243l-30-19.5c-0.461-0.3-1.05-0.322-1.533-0.061c-0.483,0.263-0.785,0.769-0.785,1.318v39   c0,0.55,0.301,1.056,0.785,1.318c0.224,0.121,0.47,0.182,0.715,0.182c0.285,0,0.57-0.081,0.817-0.242l30-19.5   c0.426-0.276,0.683-0.75,0.683-1.258S70.243,48.519,69.817,48.243z M40.5,66.237V32.764L66.248,49.5L40.5,66.237z"/>
-	<path fill="#14b370"  d="M49.5,6.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,6.5,49.5,6.5z M49.5,89.5   c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,89.5,49.5,89.5z"/>
-</g></svg>`,
-  pause: `<svg fill="#eb4034" viewBox="0 0 129 129">  <g>    <g>   <path fill="#eb4034" d="m64.5,122.6c32.1,0 58.1-26.1 58.1-58.1s-26-58.1-58.1-58.1-58.1,26-58.1,58.1 26,58.1 58.1,58.1zm0-108.1c27.5,0 50,22.4 50,50s-22.4,50-50,50-50-22.4-50-50 22.5-50 50-50z"/>      <path fill="#e21212" d="m53.8,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c7.10543e-15,2.3 1.8,4.1 4.1,4.1z"/>  <path fill="#e21212" d="m75.2,94.7c2.3,0 4.1-1.8 4.1-4.1v-53.1c0-2.3-1.8-4.1-4.1-4.1-2.3,0-4.1,1.8-4.1,4.1v53.1c-1.42109e-14,2.3 1.8,4.1 4.1,4.1z"/>    </g>  </g></svg>`,
-  stop: `<svg fill="#eb4034" version="1.1" x="0px" y="0px" viewBox="0 0 100.25 100.25" style="enable-background:new 0 0 100.25 100.25;" xml:space="preserve"><g><path fill="#e21212" d="M49.5,7.5c-23.71,0-43,19.29-43,43s19.29,43,43,43s43-19.29,43-43S73.21,7.5,49.5,7.5z M49.5,90.5 c-22.056,0-40-17.944-40-40s17.944-40,40-40s40,17.944,40,40S71.556,90.5,49.5,90.5z"/><path fill="#e21212" d="M65,33.5H34c-0.829,0-1.5,0.672-1.5,1.5v31c0,0.828,0.671,1.5,1.5,1.5h31c0.829,0,1.5-0.672,1.5-1.5V35   C66.5,34.172,65.829,33.5,65,33.5z M63.5,64.5h-28v-28h28V64.5z"/></g></svg>`
+  play: `<svg width="24px" height="24px" viewBox="0 0 11 14" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-753, -955)"><g transform="translate(100, 852)"><g id="-Round-/-AV-/-play_arrow" transform="translate(646, 98)"><g><rect x="0" y="0" width="24" height="24"/><path d="M7,6.82 L7,17.18 C7,17.97 7.87,18.45 8.54,18.02 L16.68,12.84 C17.3,12.45 17.3,11.55 16.68,11.15 L8.54,5.98 C7.87,5.55 7,6.03 7,6.82 Z" id=" Icon-Color" fill="#14b370"/></g></g></g></g></g></svg>`,
+  pause: `<svg width="24px" height="24px" viewBox="0 0 6 8" version="1.1"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Dribbble-Light-Preview" transform="translate(-227, -3765)" fill="#e21212"><g id="icons" transform="translate(56, 160)"><path d="M172,3605 C171.448,3605 171,3605.448 171,3606 L171,3612 C171,3612.552 171.448,3613 172,3613 C172.552,3613 173,3612.552 173,3612 L173,3606 C173,3605.448 172.552,3605 172,3605 M177,3606 L177,3612 C177,3612.552 176.552,3613 176,3613 C175.448,3613 175,3612.552 175,3612 L175,3606 C175,3605.448 175.448,3605 176,3605 C176.552,3605 177,3605.448 177,3606"/></g></g></g></svg>`,
+  stop: `<svg width="24px" height="24px" viewBox="0 0 12 12" version="1.1"><g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Rounded" transform="translate(-106, -1044)"><g id="AV" transform="translate(100, 852)"><g id="-Round-/-AV-/-stop" transform="translate(0, 186)"><g><rect id="Rectangle-Copy-74" x="0" y="0" width="24" height="24"/><path d="M8,6 L16,6 C17.1,6 18,6.9 18,8 L18,16 C18,17.1 17.1,18 16,18 L8,18 C6.9,18 6,17.1 6,16 L6,8 C6,6.9 6.9,6 8,6 Z" fill="#e21212"/></g></g></g></g></g></svg>`
 };
 
 
@@ -258,7 +255,7 @@ async function playSelection() {
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 200px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
+  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 190px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move; padding: 6px`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
@@ -285,17 +282,17 @@ async function playSelection() {
   var play = ele('div');
   attr(play, 'playing', 'off');
   attr(play, 'id', 'play_btn_');
-  attr(play, 'style', `grid-area: 1 / 5; width: 28px; height: 28px; cursor: pointer;`);
+  attr(play, 'style', `grid-area: 1 / 5; width: 28px; height: 28px; cursor: pointer; transform: translate(0px, 9px);`);
   play.innerHTML = svgs.play;
   head.appendChild(play);
 
   var stp = ele('div');
-  attr(stp, 'style', `grid-area: 1 / 6; width: 28px; height: 28px; cursor: pointer;`);
+  attr(stp, 'style', `grid-area: 1 / 6; width: 28px; height: 28px; cursor: pointer; transform: translate(0px, 9px);`);
   stp.innerHTML = svgs.stop;
   head.appendChild(stp);
 
   var cls = ele('div');
-  attr(cls, 'style', `grid-area: 1 / 7; width: 33px; height: 33px; cursor: pointer;`);
+  attr(cls, 'style', `grid-area: 1 / 7; width: 44px; height: 44px; cursor: pointer;`);
   head.appendChild(cls);
   cls.innerHTML = svgs.close;
   cls.onmouseenter = aninCloseBtn;
@@ -333,16 +330,14 @@ async function playSelection() {
 
   cls.onclick = () => {
     if(gi(document, 'selection_window')){gi(document, 'selection_window').outerHTML = '';};
-    synth.cancel();
+    try{ synth.cancel();} catch(err){console.log(err)}
     cont.outerHTML = '';
   };
 
   var pi = 1;
 
   play.onclick = () => {
-    var lang = gi(document,'language_selection').getAttribute('datalang');
     var ca = play.getAttribute('playing');
-    var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
 
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
@@ -383,14 +378,12 @@ function initSpeech(status){
     spans.pop();
     spans.reverse();
     var pos = ( (spans.length) - (spans.map(el => /\s/.test(el.innerText)).indexOf(true)) ) -1;
-console.log(pos);
     for(var i=0; i<pos; i++){
 	  textElm.removeChild(tn(textElm,'span')[0]);
     }
     addSpansToText(gi(document,'tts_viewer_text'));
   }
   synth = window.speechSynthesis;
-
   utterThis = new SpeechSynthesisUtterance(formatDivContentAsString(gi(document,'tts_viewer_text').innerHTML) ? formatDivContentAsString(text.innerHTML) : textDefault);
   utterThis.lang = lang;
   utterThis.pitch = 1;
@@ -399,7 +392,6 @@ console.log(pos);
   utterThis.onend = (e) => {
     synth.cancel();
   };
-
   utterThis.onboundary = (e) => {
     showLastWord(e.charIndex);
   };
