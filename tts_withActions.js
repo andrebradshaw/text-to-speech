@@ -11,7 +11,6 @@ function reChar(s) {	return typeof s == 'string' && s.match(/&#\d+;/g) && s.matc
 
 var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ') : s;
 
-
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
 function harvardAutoText(){
@@ -203,13 +202,13 @@ var opts = [
 ];
 
 function hoverin() {
-  this.style.background = '#15536e';
+  this.style.background = '#143442';
   this.style.color = '#fff';
   this.style.transition = 'all 133ms';
 }
 function hoverout() {
   this.style.background = '#fff';
-  this.style.color = '#15536e';
+  this.style.color = '#143442';
   this.style.transition = 'all 133ms';
 }
 
@@ -225,7 +224,7 @@ function languageSelector() {
   for (var i = 0; i < opts.length; i++) {
     var langOptions = ele('div');
     attr(langOptions, 'dataLang', opts[i][0]);
-    attr(langOptions, 'style', `padding: 4px; cursor: pointer; border: 1.2px solid #15536e; background: #fff; color: #15536e; ${(i == 0) ? 'border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;' : (i == opts.length-1) ? 'border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em;' : ''}`);
+    attr(langOptions, 'style', `padding: 4px; cursor: pointer; border: 1.2px solid #143442; background: #fff; color: #143442; ${(i == 0) ? 'border-top-left-radius: 0.4em; border-top-right-radius: 0.4em;' : (i == opts.length-1) ? 'border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em;' : ''}`);
     langOptions.innerText = opts[i][1];
     langOptions.onclick = selectLang;
     selWindow.appendChild(langOptions);
@@ -255,24 +254,24 @@ async function playSelection() {
   document.body.appendChild(cont);
 
   var head = ele('div');
-  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 190px 218px 30px 30px 33px; grid-gap: 1%; background: #041e29; border: 1.6px solid #041e29; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
+  attr(head, 'style', `display: grid; grid-template-columns: ${(4*16)}px ${(4*16)}px 190px 218px 30px 30px 33px; grid-gap: 1%; background: #0a1114; border: 1.6px solid #0a1114; border-top-left-radius: 0.4em; border-top-right-radius: 0.4em; cursor: move;`);
   cont.appendChild(head);
   head.onmouseover = dragElement;
 
   var slab = ele('div');
-  attr(slab, 'style', 'grid-area: 1 / 1; color: #fff; padding: 6px; border-radius: 0.4em; text-align: center');
+  attr(slab, 'style', `grid-area: 1 / 1; color: #fff; padding: 6px; border-radius: 0.4em; text-align: center; transform: translate(0px, 3px)`);
   slab.innerText = 'speed';
   head.appendChild(slab);
 
   var speed = ele('div');
   attr(speed, 'contentEditable', 'true');
   attr(speed, 'id', 'speed_selection');
-  attr(speed, 'style', 'text-align: center; height: 40px; grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: scale(0.8, 0.8);');
+  attr(speed, 'style', 'height: 30px; text-align: center; grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: translate(0px, 3px) scale(0.8, 0.8);');
   speed.innerText = '1.7';
   head.appendChild(speed);
 
   var lang_ = ele('div');
-  attr(lang_, 'style', `text-align: center; grid-area: 1 / 4; background: #15536e; color: #fff; border: 1px solid #073b52; border-radius: 0.2em; cursor: pointer; transform: scale(0.8, 0.8); padding: 8px; box-shadow: 1px 1px 1px 1px #043347;`);
+  attr(lang_, 'style', `height: 36px; text-align: center; grid-area: 1 / 4; background: #162830; color: #fff; border: 1px solid #122e3b; border-radius: 0.2em; cursor: pointer; transform: translate(0px, 3px) scale(0.8, 0.8); padding: 8px; box-shadow: 0px 1px 1px 1px #143442;`);
   attr(lang_, 'id', 'language_selection');
   attr(lang_,'datalang','en-US');
   lang_.innerText = 'English US';
@@ -305,12 +304,12 @@ async function playSelection() {
   var text = ele('div');
   attr(text, 'contentEditable', 'true');
   attr(text, 'id', 'tts_viewer_text');
-  attr(text, 'style', `background: #043347; color: #fff; padding: 10px; text-align: left; border: 1.6px solid #041e29; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.7)}px; overflow-y: auto; padding: 18px;`);
+  attr(text, 'style', `background: #162830; color: #fff; text-align: left; border: 1.6px solid #0a1114; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.7)}px; overflow-y: auto; padding: 18px;`);
   cbod.appendChild(text);
   text.innerHTML = selText;
 
   speed.onfocus = () => {
-    slab.style.transform = 'translate(10px, 0px)';
+    slab.style.transform = 'translate(10px, 3px)';
     slab.style.opacity = '.3';
     slab.style.transition = 'all 103ms ease-in';
     slab.addEventListener('transitionend', () => {
@@ -318,7 +317,7 @@ async function playSelection() {
     });
   };
   speed.onblur = () => {
-    slab.style.transform = 'translate(0px, 0px)';
+    slab.style.transform = 'translate(0px, 3px)';
   };
 
   stp.onclick = () =>{
