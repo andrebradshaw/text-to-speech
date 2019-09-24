@@ -335,10 +335,8 @@ async function playSelection() {
   };
 
   var pi = 1;
-
   play.onclick = () => {
     var ca = play.getAttribute('playing');
-
     if (ca == 'off') {
       text.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(text.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
       initSpeech(ca);
@@ -353,14 +351,12 @@ async function playSelection() {
       play.innerHTML = svgs.play;
       synth.pause();
     }
-
     if (ca == 'play' && ca != 'off') {
       attr(play, 'playing', 'pause');
       play.innerHTML = svgs.pause;
       synth.resume();
     }
   };
-
 }
 function addSpansToText(textElm){
   textElm.innerHTML = '<span class="wordStrmArr">' + formatDivContentAsString(textElm.innerHTML).split("").reduce((a, b) => a + `</span><span class="wordStrmArr">` + b) + '</span>';
@@ -369,9 +365,9 @@ function addSpansToText(textElm){
 function initSpeech(status){
   var text = gi(document,'tts_viewer_text');
   var play = gi(document,'play_btn_');
-  var speed = gi(document,'speed_selection').innerText;
+  var speed = formatDivContentAsString(gi(document,'speed_selection').innerText);
   var lang = gi(document,'language_selection').getAttribute('datalang');
-  var rate = /[\d\.]+/.test(speed.innerHTML) ? reg(/[\d\.]+/.exec(formatDivContentAsString(speed.innerHTML)), 0): 1;
+  var rate = /[\d\.]+/.test(speed) ? reg(/[\d\.]+/.exec(speed), 0): 1;
   if(status == 'stopped'){
     var textElm = gi(document,'tts_viewer_text');
     var spans = Array.from(tn(textElm,'span')).filter(el=> el.style.borderBottomStyle == 'solid');
@@ -388,17 +384,15 @@ function initSpeech(status){
   utterThis.lang = lang;
   utterThis.pitch = 1;
   utterThis.rate = rate;
-
   utterThis.onend = (e) => {
     synth.cancel();
   };
   utterThis.onboundary = (e) => {
     showLastWord(e.charIndex);
   };
-
   attr(text, 'contentEditable', 'false');
   attr(play, 'playing', 'pause');
   synth.speak(utterThis);
-
 }
+
 playSelection();
