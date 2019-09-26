@@ -13,6 +13,11 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function politicoAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
+  return elmsText.replace(/Story Continued Below/g, '').replace(/This is a modal window./g,'').replace(/End of dialog window./g,'').replace(/This modal can be closed by pressing the Escape key or activating the close button./g,'').replace(/POLITICO NEWSLETTERS[\W\w\n]+/g,'').replace(/Link Copied/,'').trim();
+}
+
 function harvardAutoText(){
   var elmsText = cn(document,'article-body basic-text').length ? Array.from(cn(document,'article-body basic-text')[0].querySelectorAll("p, h2, h3")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b) : '';
   return elmsText.trim();
@@ -90,6 +95,7 @@ async function grabTextContent(){
     if(/news\.yahoo\.com\/\w+/.test(url)) var sel = yahooAutoText();
     if(/\beconomist.com\/\w/.test(url)) var sel = economistAutoText();
     if(/news\.harvard\.edu\/\w+/.test(url)) var sel = harvardAutoText();
+    if(/\bpolitico\.com\/\w/.test(url)) var sel = politicoAutoText();
     if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
   return sel;
@@ -306,7 +312,7 @@ async function playSelection() {
   attr(text, 'id', 'tts_viewer_text');
   attr(text, 'style', `background: #162830; color: #fff; text-align: left; border: 1.6px solid #0a1114; border-bottom-left-radius: 0.4em; border-bottom-right-radius: 0.4em; max-height: ${(screen.height *0.7)}px; overflow-y: auto; padding: 18px;`);
   cbod.appendChild(text);
-  text.innerHTML = selText;
+  text.innerHTML = selText.replace(/\n/g, '<br>');
 
   speed.onfocus = () => {
     slab.style.transform = 'translate(10px, 3px)';
