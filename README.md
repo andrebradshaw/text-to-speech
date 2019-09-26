@@ -12,6 +12,7 @@ Current version automatically grabs text from articles within the following webs
   8) Yahoo News
   9) The Economist
   10) Harvard Gazette
+  11) Politico
 
 UPDATES: Content, speed and language is editable while the script is stopped, but not while paused.
 
