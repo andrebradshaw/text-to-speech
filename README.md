@@ -14,6 +14,7 @@ Current version automatically grabs text from articles within the following webs
   10) Harvard Gazette
   11) Politico
   12) NBC News
+  13) The Hill
 
 UPDATES: Content, speed and language is editable while the script is stopped, but not while paused.
 
