@@ -13,8 +13,11 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
-function bloombergAutoText(){
-  var elmsText = Array.from(document.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
+async function bloombergAutoText(){
+  var res = await fetch(window.location.href);
+  var text = await res.text();
+  var doc = new DOMParser().parseFromString(text,'text/html');
+  var elmsText = Array.from(doc.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
   return elmsText.trim();
 }
 
@@ -113,7 +116,7 @@ async function grabTextContent(){
     if(/\bpolitico\.com\/\w/.test(url)) var sel = politicoAutoText();
     if(/\bnbcnews\.com\/\w/.test(url)) var sel = nbcAutoText();
     if(/\bthehill\.com\/\w/.test(url)) var sel = thehillAutoText();
-    if(/\bbloomberg\.com\/\w/.test(url)) var sel = bloombergAutoText();
+    if(/\bbloomberg\.com\/\w/.test(url)) var sel = await bloombergAutoText();
     if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
   return sel;
