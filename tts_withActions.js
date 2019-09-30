@@ -18,7 +18,7 @@ async function bloombergAutoText(){
   var text = await res.text();
   var doc = new DOMParser().parseFromString(text,'text/html');
   var elmsText = Array.from(doc.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
-  return elmsText.trim();
+  return elmsText.replace(/This column does not necessarily reflect the opinion of the editorial board[\w\W\n]+/,'').replace(/Photographer:\s*\w.+/g,'').replace(/Expertise matters./g,'').trim();
 }
 
 function thehillAutoText(){
