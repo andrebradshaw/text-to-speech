@@ -14,7 +14,7 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
 function bloombergAutoText(){
-  var elmsText = Array.from(document.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b)
+  var elmsText = Array.from(document.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
   return elmsText.trim();
 }
 
