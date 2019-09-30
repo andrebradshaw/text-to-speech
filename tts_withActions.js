@@ -13,6 +13,11 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function bloombergAutoText(){
+  var elmsText = Array.from(document.body.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b)
+  return elmsText.trim();
+}
+
 function thehillAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
   return elmsText.replace(/THE HILL 1625 K STREET[\w\W\n]+/,'').trim();
@@ -108,6 +113,7 @@ async function grabTextContent(){
     if(/\bpolitico\.com\/\w/.test(url)) var sel = politicoAutoText();
     if(/\bnbcnews\.com\/\w/.test(url)) var sel = nbcAutoText();
     if(/\bthehill\.com\/\w/.test(url)) var sel = thehillAutoText();
+    if(/\bbloomberg\.com\/\w/.test(url)) var sel = bloombergAutoText();
     if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
   return sel;
