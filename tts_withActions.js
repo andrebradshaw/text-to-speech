@@ -13,6 +13,21 @@ var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').repl
 
 var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
 
+function loadingElm() {
+  var loaD = document.createElement("div");
+  loaD.setAttribute("id", "loader-elm");
+  document.body.appendChild(loaD);
+  loaD.style.top = '6%';
+  loaD.style.left = '50%';
+  loaD.style.position = "fixed";
+  loaD.style.zIndex = "10001";
+  loaD.innerHTML = '<svg version="1.1" id="Layer_1" x="0px" y="0px"     width="200px" height="200px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;">    <rect x="0" y="10" width="4" height="0" fill="#333" opacity="0.2">      <animate attributeName="opacity" values="0.2; 1; .2" begin="0s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="height" values="10; 20; 10" begin="0s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="y"values="10; 5; 10" begin="0s" dur="555ms" repeatCount="indefinite" />    </rect>    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">      <animate attributeName="opacity" values="0.2; 1; .2" begin="0.15s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="height" values="10; 20; 10" begin="0.15s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="y" values="10; 5; 10" begin="0.15s" dur="555ms" repeatCount="indefinite" />    </rect>    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">      <animate attributeName="opacity" values="0.2; 1; .2" begin="0.3s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="height" values="10; 20; 10" begin="0.3s" dur="555ms" repeatCount="indefinite" />      <animate attributeName="y" values="10; 5; 10" begin="0.3s" dur="555ms" repeatCount="indefinite" />    </rect>  </svg>';
+}
+
+function killLoader() {
+  document.body.removeChild(document.getElementById("loader-elm"));
+}
+
 async function bloombergAutoText(){
   var res = await fetch(window.location.href);
   var text = await res.text();
@@ -104,6 +119,7 @@ async function grabTextContent(){
   var sel = getSelectionText().trim();
   var url = window.location.href;
   if(sel == false){
+    loadingElm();
     if(/reuters\.com\/article\/\w/.test(url)) var sel = reutersAutoText();
     if(/washingtonpost\.com/.test(url)) var sel = wpAutoText();
     if(/rollingstone\.com\/\w+/.test(url)) var sel = rollstoneAutoText();
@@ -272,6 +288,7 @@ function selectLang() {
 async function playSelection() {
   var textDefault = 'This is a test of speaking like a human. Hopefully this will help you recognize that robots are humans too... You monster.';
   var selectedWinText = await grabTextContent();
+  killLoader();
   var selText = selectedWinText ? selectedWinText : textDefault;
   if (gi(document, 'tts_viewer_pop')) gi(document, 'tts_viewer_pop').outerHTML = '';
 
