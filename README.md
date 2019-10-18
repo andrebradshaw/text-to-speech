@@ -16,6 +16,8 @@ Current version automatically grabs text from articles within the following webs
   12) NBC News
   13) The Hill
   14) Bloomberg
+  15) The Guardian
+  16) The Intercept
 
 UPDATES: Content, speed and language is editable while the script is stopped, but not while paused.
 
