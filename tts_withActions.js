@@ -11,7 +11,7 @@ function reChar(s) {	return typeof s == 'string' && s.match(/&#\d+;/g) && s.matc
 
 var noHtmlEntities = (s) => typeof s == 'string' ? s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ') : s;
 
-var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '\n').replace(/<.+?>/g, '').trim()));
+var formatDivContentAsString = (s) => noHtmlEntities(reChar(s.replace(/<span>|<br>/g, '. ').replace(/<.+?>/g, '').trim()));
 
 function loadingElm() {
   var loaD = document.createElement("div");
@@ -114,6 +114,10 @@ function economistAutoText(){
   var elmsText = Array.from(document.querySelectorAll("p, h2")).filter(el=> el.innerText).map(el=> el.innerText).reduce((a,b)=> a+'\n'+b);
   return elmsText.trim().replace(/You’ve seen the news, now discover the story[\w\W\n]*/,'').replace(/Upgrade your inbox and get our Daily Dispatch and Editor's Picks./,'');
 }
+function theguardianAutoText(){
+  var elmsText = Array.from(document.querySelectorAll("p")).filter(el=> el.innerText && /class/.test(el.outerHTML) === false).map(el=> el.innerText.replace(/You've reached your free monthly limi.+/,'')).reduce((a,b)=> a+'\n'+b);
+  return elmsText.trim().replace(/… about how we will respond to the escalating climate crisis[\w\W\n]+/, '');
+}
 
 async function grabTextContent(){ 
   var sel = getSelectionText().trim();
@@ -132,6 +136,7 @@ async function grabTextContent(){
     if(/\bpolitico\.com\/\w/.test(url)) var sel = politicoAutoText();
     if(/\bnbcnews\.com\/\w/.test(url)) var sel = nbcAutoText();
     if(/\bthehill\.com\/\w/.test(url)) var sel = thehillAutoText();
+    if(/theguardian.com\/|theintercept.com\//.test(url)) var sel = theguardianAutoText();
     if(/\bbloomberg\.com\/\w/.test(url)) var sel = await bloombergAutoText();
     if(/nytimes\.com\/\d{4}\//.test(url)) var sel = await nytAutoText();
   }
@@ -311,7 +316,7 @@ async function playSelection() {
   attr(speed, 'contentEditable', 'true');
   attr(speed, 'id', 'speed_selection');
   attr(speed, 'style', 'height: 30px; text-align: center; grid-area: 1 / 2; border-radius: 0.3em; background: #fff; color: #1c1c1c; padding: 6px; border-radius: 0.3em; cursor: text; transform: translate(0px, 3px) scale(0.8, 0.8);');
-  speed.innerText = '1.3';
+  speed.innerText = '1.0';
   head.appendChild(speed);
 
   var lang_ = ele('div');
@@ -430,6 +435,7 @@ function initSpeech(status){
   utterThis.onend = (e) => {
     synth.cancel();
   };
+
   utterThis.onboundary = (e) => {
     showLastWord(e.charIndex);
   };
