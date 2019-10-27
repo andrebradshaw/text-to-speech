@@ -120,10 +120,10 @@ function theguardianAutoText(){
 }
 
 async function grabTextContent(){ 
+  loadingElm();
   var sel = getSelectionText().trim();
   var url = window.location.href;
   if(sel == false){
-    loadingElm();
     if(/reuters\.com\/article\/\w/.test(url)) var sel = reutersAutoText();
     if(/washingtonpost\.com/.test(url)) var sel = wpAutoText();
     if(/rollingstone\.com\/\w+/.test(url)) var sel = rollstoneAutoText();
